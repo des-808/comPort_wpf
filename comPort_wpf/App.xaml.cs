@@ -11,11 +11,5 @@ namespace comPort_wpf
     public partial class App : Application
     {
 
-
-
-
-
-
-
     }
 }

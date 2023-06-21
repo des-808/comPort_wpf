@@ -1,28 +1,16 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Ports;
-using System.Security.Policy;
+using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Drawing;
-using System.Threading;
-using System.Collections.ObjectModel;
-using System.Windows.Ink;
 using System.Windows.Forms;
-using Label = System.Windows.Controls.Label;
-using Button = System.Windows.Controls.Button;
-using TextBox = System.Windows.Forms.TextBox;
-using ListBox = System.Windows.Forms.ListBox;
-using MessageBox = System.Windows.MessageBox;
+using System.Windows.Input;
 using System.Windows.Threading;
-using System.Configuration;
-using System.Windows.Navigation;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using System.Linq;
-using System.Diagnostics.PerformanceData;
-using System.Data;
-using System.Text;
+using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.MessageBox;
 
 namespace comPort_wpf
 {
@@ -34,7 +22,7 @@ namespace comPort_wpf
         //SettingsLoadedEventHandler settingsLoaded;
         //public event EventHandler Click;
         //public Com MyCom { get; set; }
-        public  ComStruct? MyStruct { get; set; }
+        public ComStruct? MyStruct { get; set; }
         private string[] ports = new[] { "" };
         public static ComStruct comInitStruct = new ComStruct("COM7");
         public SerialPort MyPort = new(comInitStruct.pName, comInitStruct.baudRat, comInitStruct.parity, comInitStruct.dBit, comInitStruct.sBit);
@@ -51,8 +39,8 @@ namespace comPort_wpf
         ////public static readonly DependencyProperty ComProperty;
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
-       
-        
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -91,7 +79,7 @@ namespace comPort_wpf
             //com_portt.ContextMenu = contextmenu;
 
         }
-     
+
         //SerialPort myPort = new SerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
         private void Timer_0_Clock()
         {
@@ -101,7 +89,7 @@ namespace comPort_wpf
             timer.Tick += (o, e) => { tBlockClock.Text = DateTime.Now.ToString("HH:mm:ss"); };
             timer.Start();
         }
-        private static void SearchPorts(out string[] ports){ports = SerialPort.GetPortNames();}
+        private static void SearchPorts(out string[] ports) { ports = SerialPort.GetPortNames(); }
         private void ComPortSettings(object sender, RoutedEventArgs e)
         {
             //Window comWindow = new Window();
@@ -112,7 +100,7 @@ namespace comPort_wpf
         {
             MyPort.PortName = comInitStruct.pName;//  "COM7";
             MyPort.BaudRate = comInitStruct.baudRat;//  115200;
-            MyPort.Parity   = comInitStruct.parity;// Parity.None ;//Parity.None
+            MyPort.Parity = comInitStruct.parity;// Parity.None ;//Parity.None
             MyPort.DataBits = comInitStruct.dBit;//  8;
             MyPort.StopBits = comInitStruct.sBit;//  StopBits.One;
         }
@@ -157,7 +145,7 @@ namespace comPort_wpf
         {
             bool _port = true;
             toolbar_sostoyanie.Text = comInitStruct.pName + " Отключен";
-            try { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler;   }
+            try { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler; }
             catch (NullReferenceException) { toolbar_sostoyanie.Text = "CommPort не инициализирован"; /*MessageBox.Show("CommPort no Initialize!!!");*/  }
             finally { _port = false; }
             ToolBarComDeInit();
@@ -167,7 +155,7 @@ namespace comPort_wpf
         {
             int i = 0;
             bool _port = true;
-            if (MyPort.IsOpen) {  MyPort.Close();  MyPort.DataReceived -= DataReceivedHandler; }
+            if (MyPort.IsOpen) { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler; }
             ComPortInit();
             ToolBarComInit();
             try
@@ -182,7 +170,7 @@ namespace comPort_wpf
             catch (FileNotFoundException) { i = 2;/* MessageBox.Show(comInitStruct.pName + " Не существует");*/ }
             finally
             {
-                if (i > 0) {_port = false;ToolBarComDeInit(); }
+                if (i > 0) { _port = false; ToolBarComDeInit(); }
                 if (i == 1) { toolbar_sostoyanie.Text = comInitStruct.pName + " уже используется"; }
                 else if (i == 2) { toolbar_sostoyanie.Text = comInitStruct.pName + " Не существует"; }
             }
@@ -193,7 +181,7 @@ namespace comPort_wpf
             Thread.Sleep(50);
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
-            char[] delimiterCharss = { '\r','\n' };//{ '.', '!', '?' };
+            char[] delimiterCharss = { '\r', '\n' };//{ '.', '!', '?' };
             string[] podstroki = indata.Split(delimiterCharss, StringSplitOptions.RemoveEmptyEntries);
             if (btnStop) { return; }
             foreach (var item in podstroki)
@@ -201,15 +189,17 @@ namespace comPort_wpf
                 Dispatcher.Invoke(DispatcherPriority.Send, new UpTDelegate(ReadData), item);
             }
         }
-        private void ReadData(string data){
-            string dataHex = stringToHex.ToHex(data); 
+        private void ReadData(string data)
+        {
+            string dataHex = stringToHex.ToHex(data);
             terminalRx.Add(new Terminal { Count = term.CountsRx(), Time = term.Tim(), HEX = dataHex, ASCII = data });
             //terminalRx.SelectedIndex = terminalRx.Items.Count - 1;
             //terminalRx.ScrollIntoView(terminalRx.SelectedItem);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
         private void send_tx_message(object sender, RoutedEventArgs e)
-        {   if (tBoxMessage_tx.Text == "") return;
+        {
+            if (tBoxMessage_tx.Text == "") return;
             string data = tBoxMessage_tx.Text;
             string dataHex = stringToHex.ToHex(data);
             byte[] ba = Encoding.Default.GetBytes(data);
@@ -218,7 +208,7 @@ namespace comPort_wpf
                 MyPort.Write(ba, 0, ba.Length);
                 terminalTx.Add(new Terminal { Count = term.CountsTx(), Time = term.Tim(), HEX = dataHex, ASCII = data });
             }
-            catch (Exception ) { string port = MyPort.PortName; MessageBox.Show("Шо то не так с комм портом " + port); }
+            catch (Exception) { string port = MyPort.PortName; MessageBox.Show("Шо то не так с комм портом " + port); }
         }
         private void btnConect_Checked(object sender, RoutedEventArgs e)
         {
@@ -236,7 +226,7 @@ namespace comPort_wpf
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try{ Close_port(); }
+            try { Close_port(); }
             catch { System.Windows.MessageBox.Show("error close port"); }
             //const string message = "Are you sure that you would like to close the form?";
             //const string caption = "Form Closing";
@@ -265,24 +255,24 @@ namespace comPort_wpf
             public Parity parity { get { return parityBits; } set { parityBits = value; } }
             public int dBit { get { return dataBits; } set { dataBits = value; } }
             public StopBits sBit { get { return stopBits; } set { stopBits = value; } }
-            
-            }
+
+        }
         public class Com : ComStruct
         {
             public required string Name { get; set; } = "";
             public required string BoudRate { get; set; }
-            public required string PortName { get; set; } 
-            public required string Parity { get; set; } 
-            public required string DBit{ get; set; } 
-            public required string SBit { get; set; } 
-            
-            
+            public required string PortName { get; set; }
+            public required string Parity { get; set; }
+            public required string DBit { get; set; }
+            public required string SBit { get; set; }
+
+
             public bool isChecked { get; set; } = false;
             public override string ToString() => $"{Name}";
-            
+
             //public ComStruct comStruct { get { return comStruct; } }
-           //public required ComStruct ComStructGS { get; set; }
-           
+            //public required ComStruct ComStructGS { get; set; }
+
             //public override bool 
         }
         private void Message_Menu(object sender, MouseButtonEventArgs e) => System.Windows.MessageBox.Show("Сообщения");
@@ -312,7 +302,7 @@ namespace comPort_wpf
 
 
             mPort.IsOpen = true;
-           
+
         }
         private void Box_Click_Boudrate(object sender, MouseButtonEventArgs e)
         {
@@ -380,10 +370,10 @@ namespace comPort_wpf
 
             // Add functionality to the menu items using the Click event. 
             menuItem1.Click += new RoutedEventHandler(menuItem1_Click);
-            
+
             // Assign mainMenu1 to the form.
             //this.xz = mainMenu1;
-           // Menu xz1 
+            // Menu xz1 
         }
 
         private void menuItem1_Click(object sender, System.EventArgs e)
@@ -394,36 +384,38 @@ namespace comPort_wpf
             fd.ShowDialog();
         }
         private void Message_O_Programme(object sender, MouseButtonEventArgs e)
-        {  
-            
+        {
+
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
             //cm.PlacementTarget = sender as System.Windows.Controls.Button;
             //cm.IsOpen = true;
-            if (btnVisibleClock) { 
-               // this.StBClock.Visibility = Visibility.Collapsed; 
-                btnVisibleClock = false; 
+            if (btnVisibleClock)
+            {
+                // this.StBClock.Visibility = Visibility.Collapsed; 
+                btnVisibleClock = false;
                 //this.gridRx.Visibility = Visibility.Collapsed; 
                 //this.stbsender.Visibility = Visibility.Hidden;
-                }
-            else {
+            }
+            else
+            {
                 //this.StBClock.Visibility = Visibility.Visible; 
-                btnVisibleClock = true; 
+                btnVisibleClock = true;
                 //this.gridRx.Language.IetfLanguageTag = Language.IetfLanguageTag ;
                 //this.stbsender.Visibility = Visibility.Visible;
-                }
-            
-            
+            }
+
+
         }
         private void menu1(object sender, RoutedEventArgs e)
         {
             var a = (MenuItem)sender;
             string x = (string)a.Header;
-            bool  n = a.IsChecked;
+            bool n = a.IsChecked;
             string xz = n.ToString();
-            System.Windows.MessageBox.Show(x+"\r\n"+n);
+            System.Windows.MessageBox.Show(x + "\r\n" + n);
             //b.IsChecked = true;
         }
         private void menu2(object sender, RoutedEventArgs e)
@@ -467,7 +459,7 @@ namespace comPort_wpf
             //try {string copy = p.Count + " " + p.Time + " " + p.HEX + " " + p.ASCII; MessageBox.Show(copy); }
             //catch(NullReferenceException) {MessageBox.Show("потерян фокус"); }
 
-            
+
         }
 
         private void O_Programme_Click(object sender, RoutedEventArgs e)
@@ -478,12 +470,14 @@ namespace comPort_wpf
     public class StringToHex
     {
         private string hexString = "";
-     public  string ToHex(string input) {
+        public string ToHex(string input)
+        {
             hexString = "";
             byte[] ba = Encoding.Default.GetBytes(input);
             hexString = BitConverter.ToString(ba);
             hexString = hexString.Replace("-", " ");
-            return hexString; }
+            return hexString;
+        }
     }
 
     public class Terminal
@@ -498,8 +492,8 @@ namespace comPort_wpf
         public void SetCountRx(int c) { countRx = c; }
         public void SetCountTx(int c) { countTx = c; }
         //public int GetCount() { return count; }
-        public string CountsRx(){ countRx++; return countRx.ToString();}
-        public string CountsTx(){ countTx++; return countTx.ToString();}
+        public string CountsRx() { countRx++; return countRx.ToString(); }
+        public string CountsTx() { countTx++; return countTx.ToString(); }
         public string Tim() { return DateTime.Now.ToString("HH:mm:ss:fff"); }
     }
 
@@ -508,7 +502,7 @@ namespace comPort_wpf
         public static string Value { get; set; }
     }
 
-    
+
 
 }
 
