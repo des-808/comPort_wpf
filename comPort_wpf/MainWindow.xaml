@@ -346,7 +346,7 @@
                         <Separator/>
                         <MenuItem Header="Поиск..." IsCheckable="True"></MenuItem>
                     </ContextMenu>
-                </ListView.ContextMenu>
+                </ListView.ContextMenu> 
             </ListView>
             <!--пример привязки<Grid MinWidth="600" Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer}, Path=ActualWidth}">-->
             <Button                            Grid.Column="0" Grid.Row="1" Content="Очистка"    HorizontalAlignment="Right" Click="Clear_tx" ToolTip="Очистить окно передачи"                      VerticalAlignment="Center"/>
