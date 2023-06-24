@@ -32,6 +32,8 @@ namespace comPort_wpf
         public StringToHex stringToHex = new StringToHex();
         bool btnStop = false;
         bool btnVisibleClock = true;
+       
+        // public ComSearch_ comsearch = new ();
         //string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
         //string[] arrBit =      new[] { "5","6","7","8" };
         //string[] arrParitet =  new[] { "нет.","нечёт.","чёт.","марк.","пробел" };
@@ -39,6 +41,8 @@ namespace comPort_wpf
         ////public static readonly DependencyProperty ComProperty;
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
+        //public ObservableCollection<ComSearch_> listViewCom { get; set; }
+
 
 
         public MainWindow()
@@ -90,11 +94,7 @@ namespace comPort_wpf
             timer.Start();
         }
         private static void SearchPorts(out string[] ports) { ports = SerialPort.GetPortNames(); }
-        private void ComPortSettings(object sender, RoutedEventArgs e)
-        {
-            //Window comWindow = new Window();
-            //comWindow.ShowDialog();
-        }
+
 
         private void ComPortInit()
         {
@@ -276,10 +276,16 @@ namespace comPort_wpf
             //public override bool 
         }
         private void Message_Menu(object sender, MouseButtonEventArgs e) => System.Windows.MessageBox.Show("Сообщения");
-        private void Message_Settings(object sender, RoutedEventArgs e)
+        private void Terminal_Settings(object sender, RoutedEventArgs e)
         {
             Settings win = new Settings();
             win.ShowDialog();
+        }
+
+        private void ComPortSettings(object sender, RoutedEventArgs e)
+        {
+            ComPortXAML comXAML = new();
+            comXAML.ShowDialog();
         }
         private void Box_Click_Port(object sender, MouseButtonEventArgs e)
         {
@@ -502,7 +508,17 @@ namespace comPort_wpf
         public static string Value { get; set; }
     }
 
+    public class ComSearch_
+    {
 
+        private string[] ports;
+        //public string port;
+        //public string status;
+        public required Image Img{ get; set; }
+        public required string? PorT { get; set; }
+        public required string? StatuS { get; set; }
+    }
+    
 
 }
 

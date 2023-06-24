@@ -267,14 +267,14 @@
                     <Separator/>
                     <MenuItem Header="Журнал"/>
                 </MenuItem>
-                <MenuItem Header="  Настройки  "   Click="Message_Settings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
+                <MenuItem Header="  Настройки  "   Click="Terminal_Settings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
                 <MenuItem Header="  CommPort   "    Click="ComPortSettings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
                 <MenuItem Header="  О программе" Click="O_Programme_Click"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
             </Menu>
             <Button Content="Click me!" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click" />
 
             <!--<TextBlock Text="Сообщения"   MouseLeftButtonDown="Message_Menu"        Style="{DynamicResource Menu_TextBlock_Up_toolBar}"/>
-            <TextBlock Text="Настройки"   MouseLeftButtonDown="Message_Settings"    Style="{DynamicResource Menu_TextBlock_Up_toolBar}"/>
+            <TextBlock Text="Настройки"   MouseLeftButtonDown="Terminal_Settings"    Style="{DynamicResource Menu_TextBlock_Up_toolBar}"/>
             <TextBlock Text="ComPort"     MouseLeftButtonDown="Message_ComPort"     Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="com_portt"/>
             <TextBlock Text="О Программе" MouseLeftButtonDown="Message_O_Programme" Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="o_progr"/>-->
         </StackPanel>
@@ -368,11 +368,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
 			<DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-				<TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=mainWindow,FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
-				<TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=mainWindow,FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
-				<TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=mainWindow,FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
-				<TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=mainWindow,FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
-				<TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=mainWindow,FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
+				<TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
+				<TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
+				<TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
+				<TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
+				<TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
 				<TextBlock x:Name="abrakadabra" />
 				<StackPanel/>
 			</DockPanel>
