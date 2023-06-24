@@ -269,7 +269,7 @@
                 </MenuItem>
                 <MenuItem Header="  Настройки  "   Click="Terminal_Settings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
                 <MenuItem Header="  CommPort   "    Click="ComPortSettings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
-                <MenuItem Header="  О программе" Click="O_Programme_Click"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
+                <MenuItem Header=" О программе " Click="O_Programme_Click"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
             </Menu>
             <Button Content="Click me!" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click" />
 
