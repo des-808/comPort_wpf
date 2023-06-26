@@ -183,12 +183,12 @@
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
 
-        <ContextMenu x:Key="cmButton" >
+        <!--<ContextMenu x:Key="cmButton" >
             <MenuItem Header="Menu item 1" IsCheckable="True" Checked="menu1" />
             <MenuItem Header="Menu item 2" IsCheckable="True" Checked="menu2"/>
             <Separator />
             <MenuItem Header="Menu item 3" IsCheckable="True" Checked="menu3"/>
-        </ContextMenu>
+        </ContextMenu>-->
 
         <ContextMenu x:Key="mComPort"  />
         <ContextMenu x:Key="mBoudrate" >
@@ -283,7 +283,7 @@
             <ToggleButton x:Name="btnDisConect" ToolTip="Закрыть порт" Margin="2,0,2,0" Content="Disconnect" Checked="btnDisConect_Checked" Style="{DynamicResource TuggleBtnDisconnect}"/>
 
             <Button FontSize="12" VerticalAlignment="Center" ToolTip="Настройка порта"    Margin="2,0,24,0" Height="20" Click="ComPortSettings" Content="ComPort"/>
-            <Button FontSize="12" VerticalAlignment="Center" ToolTip="Выход из программы" Margin="2,0,52,0" Height="20" Click="exit_programm"   Content="Exit"/>
+            <Button FontSize="12" VerticalAlignment="Center" ToolTip="Выход из программы" Margin="2,0,52,0" Height="20" Click="Exit_programm"   Content="Exit"/>
         </StackPanel>
         <StatusBar Grid.Column="3" Grid.Row="1"  Background="#FFB4B4B4" HorizontalAlignment="Right"   x:Name="StBClock" >
             <Separator/>
@@ -360,7 +360,7 @@
             <Button x:Name="btnSend_tx" SnapsToDevicePixels="True" ClipToBounds="True" Click="send_tx_message" ToolTip="Подсказка!" VerticalAlignment="Center" Content="Send"/>
             <Separator/>
         </StatusBar>
-        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F">
+        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridToolBar">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2*" />
@@ -372,9 +372,8 @@
 				<TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
 				<TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
 				<TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
-				<TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
-				<TextBlock x:Name="abrakadabra" />
-				<StackPanel/>
+                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
+                <StackPanel/>
 			</DockPanel>
         </Grid>
 

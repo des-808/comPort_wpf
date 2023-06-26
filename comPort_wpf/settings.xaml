@@ -355,11 +355,10 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <ListBox Name="TerminalProbnList" ItemsSource="{DynamicResource ResourceKey=tTerminalProbnList;}" SelectionChanged="TerminalProbnList_SelectionChanged" Height="300"  Width="300">
+                            <ListBox Name="TerminalProbnList" ItemsSource="{DynamicResource ResourceKey=tTerminalProbnList;}" SelectionChanged="TerminalProbnList_SelectionChanged" Height="300"  Width="300"/>
 
-                            </ListBox>
 
-                            <!--<ListView Name="TerminalRXList"  ItemsSource="{DynamicResource ResourceKey=terminalRx}" Background="Black" Foreground="#FF21D111">--><!--Style="{DynamicResource ResourceKey= ListView}"--><!--
+                            <!--<ListView Name="TerminalList"  ItemsSource="{DynamicResource ResourceKey=terminalRx}" Background="Black" Foreground="#FF21D111">Style="{DynamicResource ResourceKey= ListView}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=Count}">#</GridViewColumn>
@@ -368,11 +367,11 @@
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=ASCII}">ASCII</GridViewColumn>
                                     </GridView>
                                 </ListView.View>
-                                --><!--<ListView.Resources>
+                                <ListView.Resources>
                                     <col:ArrayList x:Key="terminalRx">
                                         <local:Terminal Count="00001" Time="02:11:49:499" HEX="54990549905499054990549905499054990" ASCII="Всякая фигня тут пишется"/>
                                     </col:ArrayList>
-                                </ListView.Resources>--><!--
+                                </ListView.Resources>
                                 <ListView.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Копировать"></MenuItem>
