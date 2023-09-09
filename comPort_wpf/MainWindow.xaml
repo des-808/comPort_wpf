@@ -2,10 +2,12 @@
         xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        x:Class="comPort_wpf.MainWindow"
         xmlns:local="clr-namespace:comPort_wpf"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-        Title="ComPort tool" Height="420" Width="1200" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing" >
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="av"
+        x:Class="comPort_wpf.MainWindow"
+        Title="ComPort tool" Height="420" Width="1200" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing" 
+        Top="{Binding X, Mode=TwoWay}" Left="{Binding Y, Mode=TwoWay}">
 
     <Window.Resources>
         <!--TargetType="{x:Type TextBlock}" TargetType="{x:Type TextBox}"-->
@@ -129,14 +131,14 @@
         </Style>
         <Style x:Key="Menu_Up_toolBar" TargetType="{x:Type Menu}">
             <Setter Property="FontSize"   Value="12"/>
-            <Setter Property="Background" Value="#FFCCCBCB"/> 
+            <Setter Property="Background" Value="#FFCCCBCB"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Margin"     Value="2,0,0,0"/>
             <Style.Triggers>
                 <Trigger    Property="IsMouseOver" Value="True">
                     <Setter Property="Background"  Value="#FFCCCBCB"/>
                     <Setter Property="Foreground"  Value="Black"/>
-                    
+
                 </Trigger>
                 <Trigger    Property="IsMainMenu"   Value="True">
                     <Setter Property="Background"  Value="#FFCCCBCB"/>
@@ -144,7 +146,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
         <Style x:Key="MenuItem_Up_toolBar" TargetType="{x:Type MenuItem}">
             <Setter Property="FontSize"   Value="12"/>
             <Setter Property="Background" Value="#FF9DA1A3"/>
@@ -169,10 +171,10 @@
             <Setter Property="FontSize"   Value="12"/>
             <Setter Property="Padding"   Value="-3,-2,-3,0"/>
             <Setter Property="SelectionMode"   Value="Multiple"/>
-            
+
         </Style>
 
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>    
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
         <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
         <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
@@ -190,7 +192,40 @@
             <MenuItem Header="Menu item 3" IsCheckable="True" Checked="menu3"/>
         </ContextMenu>-->
 
-        <ContextMenu x:Key="mComPort"  />
+        <ContextMenu x:Key="mComPort"  >
+            <MenuItem Header="COM1"     IsCheckable="True" />
+            <MenuItem Header="COM2"     IsCheckable="True" />
+            <MenuItem Header="COM3"     IsCheckable="True" />
+            <MenuItem Header="COM4"     IsCheckable="True" />
+            <MenuItem Header="COM5"     IsCheckable="True" />
+            <MenuItem Header="COM6"     IsCheckable="True" />
+            <MenuItem Header="COM7"     IsCheckable="True" />
+            <MenuItem Header="COM8"     IsCheckable="True" />
+            <MenuItem Header="COM9"     IsCheckable="True" />
+            <MenuItem Header="COM10"    IsCheckable="True" />
+            <MenuItem Header="COM11"    IsCheckable="True" />
+            <MenuItem Header="COM12"    IsCheckable="True" />
+            <MenuItem Header="COM13"    IsCheckable="True" />
+            <MenuItem Header="COM14"    IsCheckable="True" />
+            <MenuItem Header="COM15"    IsCheckable="True" />
+            <MenuItem Header="COM16"    IsCheckable="True" />
+            <MenuItem Header="COM17"    IsCheckable="True" />
+            <MenuItem Header="COM18"    IsCheckable="True" />
+            <MenuItem Header="COM19"    IsCheckable="True" />
+            <MenuItem Header="COM20"    IsCheckable="True" />
+            <MenuItem Header="COM21"    IsCheckable="True" />
+            <MenuItem Header="COM22"    IsCheckable="True" />
+            <MenuItem Header="COM23"    IsCheckable="True" />
+            <MenuItem Header="COM24"    IsCheckable="True" />
+            <MenuItem Header="COM25"    IsCheckable="True" />
+            <MenuItem Header="COM26"    IsCheckable="True" />
+            <MenuItem Header="COM27"    IsCheckable="True" />
+            <MenuItem Header="COM28"    IsCheckable="True" />
+            <MenuItem Header="COM29"    IsCheckable="True" />
+            <MenuItem Header="COM30"    IsCheckable="True" />
+
+
+        </ContextMenu>
         <ContextMenu x:Key="mBoudrate" >
             <MenuItem Header="110"    IsCheckable="True" />
             <MenuItem Header="300"    IsCheckable="True"/>
@@ -301,52 +336,52 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <ListView Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}">
+            <ListView x:Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}" av:ItemsSource="{av:SampleData ItemCount=5}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Count}" >#</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Time}"  >Время</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=HEX}"   >Отправленно</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ASCII}" >ASCII</GridViewColumn>
-                    </GridView>
-                </ListView.View>
-                
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать" Command="Copy"></MenuItem>
-                        <Separator/>
-                        <MenuItem Header="Выбрать всё..." Command="Select"></MenuItem>
-                        <Separator/>
-                        <MenuItem Header="Сохранить в файл..." Command="Save"></MenuItem>
-                        <MenuItem Header="Сохранить всё в HTML..."></MenuItem>
-                        <Separator/>
-                        <MenuItem Header="Поиск..." Command="Find"></MenuItem>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-            </ListView>
-            <GridSplitter                   Grid.Column="1" Grid.RowSpan="3" Background="#FF8E90A4" ShowsPreview="True" Width="4" HorizontalAlignment="Stretch"  />
-            <ListView Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Count}" >#</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Time}"  >Время</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=HEX}"   >Принято</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ASCII}" >ASCII</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"  />
+                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Отправленно"   />
+                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII" />
                     </GridView>
                 </ListView.View>
 
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Копировать" Click="CopyRx"></MenuItem>
+                        <MenuItem Header="Копировать" Command="Copy"/>
                         <Separator/>
-                        <MenuItem Header="Выбрать всё..."></MenuItem>
+                        <MenuItem Header="Выбрать всё..." Command="Select"/>
                         <Separator/>
-                        <MenuItem Header="Сохранить в файл..."></MenuItem>
-                        <MenuItem Header="Сохранить всё в HTML..."></MenuItem>
+                        <MenuItem Header="Сохранить в файл..." Command="Save"/>
+                        <MenuItem Header="Сохранить всё в HTML..."/>
                         <Separator/>
-                        <MenuItem Header="Поиск..." IsCheckable="True"></MenuItem>
+                        <MenuItem Header="Поиск..." Command="Find"/>
                     </ContextMenu>
-                </ListView.ContextMenu> 
+                </ListView.ContextMenu>
+            </ListView>
+            <GridSplitter                   Grid.Column="1" Grid.RowSpan="3" Background="#FF8E90A4" ShowsPreview="True" Width="4" HorizontalAlignment="Stretch"  />
+            <ListView x:Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}" av:ItemsSource="{av:SampleData ItemCount=5}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"  />
+                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Принято"   />
+                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII" />
+                    </GridView>
+                </ListView.View>
+
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Копировать" Click="CopyRx"/>
+                        <Separator/>
+                        <MenuItem Header="Выбрать всё..."/>
+                        <Separator/>
+                        <MenuItem Header="Сохранить в файл..."/>
+                        <MenuItem Header="Сохранить всё в HTML..."/>
+                        <Separator/>
+                        <MenuItem Header="Поиск..." IsCheckable="True"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
             <!--пример привязки<Grid MinWidth="600" Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer}, Path=ActualWidth}">-->
             <Button                            Grid.Column="0" Grid.Row="1" Content="Очистка"    HorizontalAlignment="Right" Click="Clear_tx" ToolTip="Очистить окно передачи"                      VerticalAlignment="Center"/>
@@ -367,14 +402,14 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
-			<DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-				<TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
-				<TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
-				<TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
-				<TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
-                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow,FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
+            <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
+                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
+                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
+                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
+                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
+                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
                 <StackPanel/>
-			</DockPanel>
+            </DockPanel>
         </Grid>
 
     </Grid>

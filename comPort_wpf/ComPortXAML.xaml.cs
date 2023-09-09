@@ -16,16 +16,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Windows.Controls;
+
 
 namespace comPort_wpf
 {
     public partial class ComPortXAML : Window
     {
+        private bool ports_window_open_close_bool = true;
        private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
-        ComSearch_ search_Com;
+        //ComSearch_ search_Com;
 
        static public SerialPort MyPort = new("COM0", 115200,Parity.None,8, StopBits.One);
         Thread writeThread = new Thread(Write);
@@ -62,14 +63,16 @@ namespace comPort_wpf
             Close();
         } 
         private void Rescan_ComPort(object sender, RoutedEventArgs e)
-        {
+        {  
+            listViewCom.Clear();
            SearchPorts(out ports);
             PortBox.Items.Clear();
-            string Port = "";
+
+            //string Port = "";
             string Status = "";
             Image icon = null;
             string? error;
-            MyPort.ReadTimeout = 500;
+            MyPort.ReadTimeout = 200;//500
             MyPort.WriteTimeout = 200;
             foreach (string p in ports) {
                 // Port = p.ToString();
@@ -121,6 +124,7 @@ namespace comPort_wpf
 
         private void selectorPortBox(object sender, SelectionChangedEventArgs e)
         {
+            //MessageBox.Show(PortBox.SelectedItem.ToString());
             PortBox.Text = PortBox.SelectedItem.ToString();
         }
         private void selectorBoudBox(object sender, SelectionChangedEventArgs e)
@@ -177,9 +181,12 @@ namespace comPort_wpf
             return null;
         }
 
+        private void ports_window_open_close(object sender, RoutedEventArgs e)
+        {
+            if (!ports_window_open_close_bool) { btnPorts.Content = "Порты>>"; ports_window_open_close_bool = true; }
+            else { btnPorts.Content = "Порты<<"; ports_window_open_close_bool = false; }
 
-
-
+        }
     }
 
 

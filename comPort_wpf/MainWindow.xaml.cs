@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -34,7 +35,8 @@ namespace comPort_wpf
         public StringToHex stringToHex = new StringToHex();
         bool btnStop = false;
         bool btnVisibleClock = true;
-       
+        
+
         // public ComSearch_ comsearch = new ();
         //string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
         //string[] arrBit =      new[] { "5","6","7","8" };
@@ -50,6 +52,9 @@ namespace comPort_wpf
         public MainWindow()
         {
             InitializeComponent();
+            //this.Show();
+            // PointToScreen работает корректно
+            //var a = PointToScreen(new Point(Left, Top)).ToString();
             Timer_0_Clock();
             SearchPorts(out ports);
             ToolBarComDeInit();
@@ -123,10 +128,10 @@ namespace comPort_wpf
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
             //try { 
-                MyPort.Close(); 
+                MyPort.Close();
             //}
             //catch (NullReferenceException) { System.Windows.MessageBox.Show("CommPort no initialize!!"); }
-            Close(); // закрытие окна
+           this.Close(); // закрытие окна
         }
         private void Clear_rx(object sender, RoutedEventArgs e) { term.SetCountRx(0); terminalRx.Clear(); }
         private void Clear_tx(object sender, RoutedEventArgs e) { term.SetCountTx(0); terminalTx.Clear(); }
@@ -197,7 +202,7 @@ namespace comPort_wpf
                 MyPort.Write(ba, 0, ba.Length);
                 terminalTx.Add(new Terminal { Count = term.CountsTx(), Time = term.Tim(), HEX = dataHex, ASCII = data });
             }
-            catch (Exception) { string port = MyPort.PortName; MessageBox.Show("Шо то не так с комм портом " + port); }
+            catch (Exception) { string port = MyPort.PortName; MessageBox.Show("Шо то не так с " + port); }
         }
         private void btnConect_Checked(object sender, RoutedEventArgs e)
         {
@@ -216,6 +221,7 @@ namespace comPort_wpf
         {
             try { Close_port(); }
             catch { System.Windows.MessageBox.Show("error close port"); }
+
             //const string message = "Are you sure that you would like to close the form?";
             //const string caption = "Form Closing";
             //var result = System.Windows.Forms.MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
@@ -225,11 +231,13 @@ namespace comPort_wpf
         private void Terminal_Settings(object sender, RoutedEventArgs e)
         {
             Settings win = new Settings();
-            win.ShowDialog();
+            //win.ShowDialog();
+            win.Show();
         }
         private void ComPortSettings(object sender, RoutedEventArgs e)
         {
             ComPortXAML comXAML = new();
+            //var a = PointToScreen(new Point(Left, Top)).ToString();
             comXAML.ShowDialog();
         }
         private void Box_Click_Port(object sender, MouseButtonEventArgs e)
@@ -338,13 +346,13 @@ namespace comPort_wpf
         //}
         private void TerminalTXList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Terminal p = (Terminal)TerminalTXList.SelectedItem;
-            //MessageBox.Show(p.Count);
+            Terminal p = (Terminal)TerminalTXList.SelectedItem;
+            MessageBox.Show(p.Count);
         }
         private void TerminalRXList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Terminal p = (Terminal)TerminalRXList.SelectedItem;
-            //MessageBox.Show(p.Count);
+            Terminal p = (Terminal)TerminalRXList.SelectedItem;
+            MessageBox.Show(p.Count);
         }
         private void btn_Stop_Rx_Check(object sender, RoutedEventArgs e)
         {
@@ -378,9 +386,9 @@ namespace comPort_wpf
                 sw.Close();
             }
             catch (Exception ex){Console.WriteLine("Exception: " + ex.Message);}
-            //finally{Console.WriteLine("Executing finally block.");}
+            finally{Console.WriteLine("Executing finally block.");}
         }
-        private void O_Programme_Click(object sender, RoutedEventArgs e) => MessageBox.Show("кнопка");
+        private void O_Programme_Click(object sender, RoutedEventArgs e) => MessageBox.Show("   Не до реплика ComPort ToolKit");
     }
     public class StringToHex
     {
@@ -489,6 +497,34 @@ namespace comPort_wpf
         //public bool isChecked { get; set; } = false;
         public override string ToString() => $"{Name}";
     }
+
+
+    //class MainVM 
+    //{
+    //    double x, y;
+    //    public double X { get => x; set => Set(ref x, value); }
+    //    public double Y { get => y; set => Set(ref y, value); }
+    //    public ICommand Run { get; }
+
+    //    async void Move()
+    //    {
+    //        var centerX = X;
+    //        var centerY = Y;
+    //        var R = 50;
+    //        while (true)
+    //        {
+    //            const double delta = Math.PI * 10 / 180;
+    //            for (double angle = 0; angle < 2 * Math.PI; angle += delta)
+    //            {
+    //                X = centerX + R * Math.Cos(angle);
+    //                Y = centerY + R * Math.Sin(angle);
+    //                await Task.Delay(TimeSpan.FromMilliseconds(50));
+    //            }
+    //        }
+    //    }
+
+    //    public MainVM() { Run = new RelayCommand(o => Move()); }
+    //}
 }
 
 

@@ -50,8 +50,6 @@ namespace comPort_wpf
 
         private void rts(object sender, DragEventArgs e)
         {
-
-
         }
 
         private void rts(object sender, RoutedEventArgs e) => Data.Value = textbox1.Text;

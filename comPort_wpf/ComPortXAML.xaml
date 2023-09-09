@@ -23,15 +23,15 @@
             <ComboBox x:Name="ParityBox"   Width="79" Height="20" Canvas.Left="86" Canvas.Top="98"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <ComboBox x:Name="StopBox"     Width="79" Height="20" Canvas.Left="86" Canvas.Top="127"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <ComboBox x:Name="YprPotokBox" Width="79" Height="20" Canvas.Left="86" Canvas.Top="154"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label  x:Name="label1"  Content="Порт:"         Canvas.Left="12"  Canvas.Top="18"  FontSize="11" Padding="2,2,2,2"/>
-            <Label  x:Name="label2"  Content="Скорость:"     Canvas.Left="12"  Canvas.Top="43"  FontSize="11" Padding="2,2,2,2"/>
-            <Label  x:Name="label3"  Content="Данные:"       Canvas.Left="12"  Canvas.Top="68"  FontSize="11" Padding="2,2,2,2"/>
-            <Label  x:Name="label4"  Content="Паритет:"      Canvas.Left="12"  Canvas.Top="96"  FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Label  x:Name="label5"  Content="Стоп бит:"     Canvas.Left="12"  Canvas.Top="125" FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Label  x:Name="label6"  Content="Упр. потоком:" Canvas.Left="12"  Canvas.Top="152" FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Button x:Name="button"  Content="Порты>>"       Canvas.Left="10"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="10"/>
-            <Button x:Name="button1" Content="Ок"            Canvas.Left="80"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" FontSize="10" Click="BtnEnter"/>
-            <Button x:Name="button2" Content="Отмена"        Canvas.Left="125" Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" FontSize="10" Click="BtnCancel"/>
+            <Label  x:Name="label1"     Content="Порт:"         Canvas.Left="12"  Canvas.Top="18"  FontSize="11" Padding="2,2,2,2"/>
+            <Label  x:Name="label2"     Content="Скорость:"     Canvas.Left="12"  Canvas.Top="43"  FontSize="11" Padding="2,2,2,2"/>
+            <Label  x:Name="label3"     Content="Данные:"       Canvas.Left="12"  Canvas.Top="68"  FontSize="11" Padding="2,2,2,2"/>
+            <Label  x:Name="label4"     Content="Паритет:"      Canvas.Left="12"  Canvas.Top="96"  FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label  x:Name="label5"     Content="Стоп бит:"     Canvas.Left="12"  Canvas.Top="125" FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label  x:Name="label6"     Content="Упр. потоком:" Canvas.Left="12"  Canvas.Top="152" FontSize="11" Padding="2,2,2,2" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button x:Name="btnPorts"   Content="Порты>>"       Canvas.Left="10"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="10" Click="ports_window_open_close"/>
+            <Button x:Name="button1"    Content="Ок"            Canvas.Left="80"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" FontSize="10" Click="BtnEnter"/>
+            <Button x:Name="button2"    Content="Отмена"        Canvas.Left="125" Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" FontSize="10" Click="BtnCancel"/>
 
         </Canvas>
         <Canvas Grid.Column="1">
@@ -47,7 +47,7 @@
                 </ListView.View>
             </ListView>
             <Button x:Name="button3" Content="Обновить" Canvas.Left="122" Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50"   FontSize="10" Click="Rescan_ComPort"/>
-            <Button x:Name="selectPortNameBtn" Content="Выбрать"  Canvas.Left="10"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center"              FontSize="10" Click="Click_selectPortNameBtn"/>
+            <Button x:Name="selectPortNameBtn" Content="Выбрать"  Canvas.Left="10"  Canvas.Top="204" HorizontalAlignment="Center" VerticalAlignment="Center"    FontSize="10" Click="Click_selectPortNameBtn"/>
         </Canvas>
     </Grid>
 </Window>
