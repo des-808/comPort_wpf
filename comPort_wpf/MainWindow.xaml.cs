@@ -35,7 +35,7 @@ namespace comPort_wpf
         public StringToHex stringToHex = new StringToHex();
         bool btnStop = false;
         bool btnVisibleClock = true;
-          
+        
 
 
         // public ComSearch_ comsearch = new ();
@@ -47,6 +47,20 @@ namespace comPort_wpf
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
         public ObservableCollection<ComSearch_> listViewCom { get; set; }
+
+        public double GetWidthMainWindow()
+        {
+            return mainWindow.Width;
+        }
+
+        public void SetWidthMainWindow(object value)
+        {
+            mainWindow.Width = (double)value;
+        }
+
+        //static double widthStoronaX = GetWidthMainWindow();
+
+
         int X = Convert.ToInt32(ConfigurationManager.AppSettings["X"]);
         int Y = Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
 
@@ -56,6 +70,7 @@ namespace comPort_wpf
             //this.Show();
             // PointToScreen работает корректно
             //var a = PointToScreen(new Point(Left, Top)).ToString();
+            //checkClock.IsChecked = true;
             Timer_0_Clock();
             SearchPorts(out ports);
             ToolBarComDeInit();
@@ -82,7 +97,8 @@ namespace comPort_wpf
             //contextmenu.Items.Add(mi);
             //btn.ContextMenu = contextmenu;
             //gridToolBar.Children.Add(btn);
-        }
+            var widthMainWindow = mainWindow.Width;
+    }
         private void Timer_0_Clock()
         {
             var timer = new System.Windows.Threading.DispatcherTimer();
@@ -218,6 +234,11 @@ namespace comPort_wpf
             btnConect.IsChecked = false;
             Close_port();
         }
+
+        private void Exit_programm(object sender, MouseButtonEventArgs e) {
+            try { Close_port(); }
+            catch { System.Windows.MessageBox.Show("error close port"); }
+        }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try { Close_port(); }
@@ -233,7 +254,7 @@ namespace comPort_wpf
         {
             Settings win = new Settings();
             //win.ShowDialog();
-            win.Show();
+            win.ShowDialog();
         }
         private void ComPortSettings(object sender, RoutedEventArgs e)
         {
@@ -309,18 +330,48 @@ namespace comPort_wpf
             //cm.IsOpen = true;
             if (btnVisibleClock)
             {
-                // this.StBClock.Visibility = Visibility.Collapsed; 
-                btnVisibleClock = false;
+                 this.StBClock.Visibility = Visibility.Collapsed;btnVisibleClock = false; 
                 //this.gridRx.Visibility = Visibility.Collapsed; 
                 //this.stbsender.Visibility = Visibility.Hidden;
             }
             else
             {
-                //this.StBClock.Visibility = Visibility.Visible; 
-                btnVisibleClock = true;
+                this.StBClock.Visibility = Visibility.Visible; btnVisibleClock = true;
                 //this.gridRx.Language.IetfLanguageTag = Language.IetfLanguageTag ;
                 //this.stbsender.Visibility = Visibility.Visible;
             }
+
+
+            
+        }
+        private void Button_Click_hidden(object sender, EventArgs e) 
+        {
+            if (StecPanel_Settings.Visibility == Visibility) { StecPanel_Settings.Visibility = Visibility.Hidden; mainWindow.Background = StecPanel_Settings.Background; }
+            else StecPanel_Settings.Visibility = Visibility.Visible;
+        }
+        private void Button_Click_Signals(object sender, EventArgs e)
+        {
+            if(checkSignals.IsChecked == true) { gridSignals.Height = 25; gridSignals.Visibility = Visibility.Visible;  }   
+            else { gridSignals.Height =0; gridSignals.Visibility = Visibility.Hidden; mainWindow.Height = 445; }
+            //mainWindow.Height = 420; mainWindow.MinHeight = 300; 
+            //if (StecPanel_Settings.Visibility == Visibility) { mainWindow.Height = Visibility.Hidden; mainWindow. = StecPanel_Settings.Background; }
+            //else StecPanel_Settings.Visibility = Visibility.Visible;
+        }
+        private void Button_Rx_Data(object sender, EventArgs e) {
+
+            var x = GetWidthMainWindow();
+            double widthStorona=0;
+            if ((double)x>304) widthStorona = (double)x / 2;
+            
+            if (Rx_Data.IsChecked == true) { TerminalRXList.Visibility = Visibility.Visible; mainWindow.Width += widthStorona; TerminalRXList.Width = widthStorona; }
+            else { TerminalRXList.Visibility = Visibility.Hidden; TerminalRXList.Width = 0; mainWindow.Width = widthStorona; }
+        }
+        private void Button_Tx_Data(object sender, EventArgs e) {
+            var x = GetWidthMainWindow();
+            double widtthStorona = 0;
+            widtthStorona = (double)(x) / 2;
+            if (Tx_Data.IsChecked == true) { TerminalTXList.Visibility = Visibility.Visible; mainWindow.Width += widtthStorona; TerminalTXList.Width = widtthStorona; }
+            else { TerminalTXList.Visibility = Visibility.Hidden; TerminalTXList.Width = 0; mainWindow.Width = widtthStorona; }
         }
         //private void menu1(object sender, RoutedEventArgs e)
         //{
@@ -498,8 +549,6 @@ namespace comPort_wpf
         //public bool isChecked { get; set; } = false;
         public override string ToString() => $"{Name}";
     }
-
-
     //class MainVM 
     //{
     //    double x, y;

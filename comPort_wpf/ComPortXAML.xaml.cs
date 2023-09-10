@@ -183,9 +183,20 @@ namespace comPort_wpf
 
         private void ports_window_open_close(object sender, RoutedEventArgs e)
         {
-            if (!ports_window_open_close_bool) { btnPorts.Content = "Порты>>"; ports_window_open_close_bool = true; }
-            else { btnPorts.Content = "Порты<<"; ports_window_open_close_bool = false; }
-
+            if (!ports_window_open_close_bool) { 
+                btnPorts.Content = "Порты>>"; 
+                ports_window_open_close_bool = true; 
+                CanvasVisiblity.Visibility = Visibility.Hidden; 
+                window_settings_comPort_tools.Width = 195;
+                window_settings_comPort_tools.MinWidth = 195;
+                window_settings_comPort_tools.MaxWidth = 195; }
+            else { 
+                btnPorts.Content = "Порты<<"; 
+                ports_window_open_close_bool = false; 
+                CanvasVisiblity.Visibility = Visibility.Visible; 
+                window_settings_comPort_tools.Width = 380;
+                window_settings_comPort_tools.MinWidth = 380;
+                window_settings_comPort_tools.MaxWidth = 380; }
         }
     }
 

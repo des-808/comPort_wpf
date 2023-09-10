@@ -277,9 +277,10 @@
             <RowDefinition/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Orientation="Horizontal" Background="#FFCCCBCB" Height="20" >
+        <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Orientation="Horizontal" Background="#FFCCCBCB" Height="30" >
             <Menu Height="20"                                               Style="{DynamicResource Menu_Up_toolBar}" >
                 <MenuItem Header="  Сообщения  "                            Style="{DynamicResource MenuItem_Up_toolBar}">
                     <MenuItem Header="Редактор ообщений" />
@@ -290,41 +291,41 @@
                     <Separator/>
                     <MenuItem Header="Сообщение из файла"/>
                     <Separator/>
-                    <MenuItem Header="Выход из программы"/>
+                    <MenuItem Header="Выход из программы"                   Click="Exit_programm"/>
                 </MenuItem>
                 <MenuItem Header="  Вид   "                                 Style="{DynamicResource MenuItem_Up_toolBar}"  InputGestureText="true" >
-                    <MenuItem Header="Сигналы"                              IsCheckable="True"/>
-                    <MenuItem Header="Контроль времени"                     IsCheckable="True"/>
-                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"/>
+                    <MenuItem Header="Сигналы"                              IsCheckable="True"  Click="Button_Click_Signals" x:Name="checkSignals"  IsChecked="True"/>
+                    <MenuItem Header="Контроль времени"                     IsCheckable="True"  Click="Button_Click"         x:Name="checkClock"    IsChecked="True" />
+                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_hidden"  x:Name="checkSettings" IsChecked="True"/>
                     <Separator/>
-                    <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"/>
-                    <MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"/>
+                    <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"  Click="Button_Tx_Data"       x:Name="Tx_Data"       IsChecked="True"/>
+					<MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"       x:Name="Rx_Data"       IsChecked="True"/>
                     <Separator/>
                     <MenuItem Header="Журнал"/>
                 </MenuItem>
-                <MenuItem Header="  Настройки  "   Click="Terminal_Settings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
-                <MenuItem Header="  CommPort   "    Click="ComPortSettings" Style="{DynamicResource MenuItem_Up_toolBar}"/>
-                <MenuItem Header=" О программе " Click="O_Programme_Click"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
+                <MenuItem Header="  Настройки  "    Click="Terminal_Settings"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
+                <MenuItem Header="  CommPort   "    Click="ComPortSettings"    Style="{DynamicResource MenuItem_Up_toolBar}"/>
+                <MenuItem Header=" О программе "    Click="O_Programme_Click"  Style="{DynamicResource MenuItem_Up_toolBar}"/>
             </Menu>
-            <Button Content="Click me!" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click" />
+            <!--<Button Content="Click me!" VerticalAlignment="Center" HorizontalAlignment="Center" Click="Button_Click_hidden" />-->
 
             <!--<TextBlock Text="Сообщения"   MouseLeftButtonDown="Message_Menu"        Style="{DynamicResource Menu_TextBlock_Up_toolBar}"/>
             <TextBlock Text="Настройки"   MouseLeftButtonDown="Terminal_Settings"    Style="{DynamicResource Menu_TextBlock_Up_toolBar}"/>
             <TextBlock Text="ComPort"     MouseLeftButtonDown="Message_ComPort"     Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="com_portt"/>
             <TextBlock Text="О Программе" MouseLeftButtonDown="Message_O_Programme" Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="o_progr"/>-->
         </StackPanel>
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" Background="#FFB4B4B4" >
+        <StatusBar Grid.Column="3" Grid.Row="0"  Background="#FFCCCBCB" HorizontalAlignment="Right"   x:Name="StBClock" >
+            <Separator/>
+            <TextBlock x:Name="tBlockClock" Foreground="#FF1DEB14"  Background="Black" FontWeight="Bold" FontSize="16" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Width="65" Grid.IsSharedSizeScope="True" />
+            <Separator/>
+        </StatusBar>
+        <StackPanel Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" Background="#FFB4B4B4"  x:Name="StecPanel_Settings">
             <ToggleButton x:Name="btnConect"    ToolTip="Открыть порт" Margin="3,0,2,0" Content="Connect"    Checked="btnConect_Checked"    Style="{DynamicResource TuggleBtnConnect}" />
             <ToggleButton x:Name="btnDisConect" ToolTip="Закрыть порт" Margin="2,0,2,0" Content="Disconnect" Checked="btnDisConect_Checked" Style="{DynamicResource TuggleBtnDisconnect}"/>
 
             <Button FontSize="12" VerticalAlignment="Center" ToolTip="Настройка порта"    Margin="2,0,24,0" Height="20" Click="ComPortSettings" Content="ComPort"/>
             <Button FontSize="12" VerticalAlignment="Center" ToolTip="Выход из программы" Margin="2,0,52,0" Height="20" Click="Exit_programm"   Content="Exit"/>
         </StackPanel>
-        <StatusBar Grid.Column="3" Grid.Row="1"  Background="#FFB4B4B4" HorizontalAlignment="Right"   x:Name="StBClock" >
-            <Separator/>
-            <TextBlock x:Name="tBlockClock" Foreground="#FF1DEB14"  Background="Black" FontWeight="Bold" FontSize="16" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Width="65" Grid.IsSharedSizeScope="True" />
-            <Separator/>
-        </StatusBar>
 
         <Grid Grid.Row="2" Grid.ColumnSpan="3" Background="#FFCCC8C8">
             <Grid.ColumnDefinitions>
@@ -395,7 +396,7 @@
             <Button x:Name="btnSend_tx" SnapsToDevicePixels="True" ClipToBounds="True" Click="send_tx_message" ToolTip="Подсказка!" VerticalAlignment="Center" Content="Send"/>
             <Separator/>
         </StatusBar>
-        <Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridToolBar">
+        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridToolBar">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2*" />
@@ -411,6 +412,9 @@
                 <StackPanel/>
             </DockPanel>
         </Grid>
+		<Grid  Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridSignals" Grid.Height="25">
+			
+		</Grid>
 
     </Grid>
 </Window>
