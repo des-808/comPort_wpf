@@ -124,8 +124,12 @@ namespace comPort_wpf
 
         private void selectorPortBox(object sender, SelectionChangedEventArgs e)
         {
-            //MessageBox.Show(PortBox.SelectedItem.ToString());
-            PortBox.Text = PortBox.SelectedItem.ToString();
+            try {
+                //MessageBox.Show(PortBox.SelectedItem.ToString());
+                PortBox.Text = PortBox.SelectedItem.ToString();
+            }
+            catch(NullReferenceException ex) { MessageBox.Show(ex.ToString()); }
+           
         }
         private void selectorBoudBox(object sender, SelectionChangedEventArgs e)
         {
