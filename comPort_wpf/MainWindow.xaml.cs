@@ -20,14 +20,23 @@ namespace comPort_wpf
 {
     public partial class MainWindow : System.Windows.Window
     {
-        public ComStruct? MyStruct { get; set; }
+       // public delegate void Mydelegate();
+        private static Settings1 settings = new();
+       // public ComStruct? MyStruct { get; set; }
         private string[] ports = new[] { "" };
         //public static ComStruct comInitStruct = new ComStruct("COM6");
-        public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
-                                              Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
-                                      (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
-                                              Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
-                                    (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
+        //public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
+        //                                      Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
+        //                              (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
+        //                                      Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
+        //                            (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
+        //public SerialPort MyPort = new(comInitStruct.pName, comInitStruct.baudRat, comInitStruct.parity, comInitStruct.dBit, comInitStruct.sBit);
+      
+        public static ComStruct comInitStruct = new ComStruct(settings.Port,
+                                              Convert.ToInt32(settings.BoudRate),
+                                      (Parity)Convert.ToInt32(settings.Parity),
+                                              Convert.ToInt32(settings.Data),
+                                    (StopBits)Convert.ToInt32(settings.Stop));
         public SerialPort MyPort = new(comInitStruct.pName, comInitStruct.baudRat, comInitStruct.parity, comInitStruct.dBit, comInitStruct.sBit);
         public ContextMenu? mPortContextMenu = new ContextMenu();
         private delegate void UpTDelegate(string text);
@@ -35,8 +44,6 @@ namespace comPort_wpf
         public StringToHex stringToHex = new StringToHex();
         bool btnStop = false;
         bool btnVisibleClock = true;
-        
-
 
         // public ComSearch_ comsearch = new ();
         //string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
@@ -48,25 +55,19 @@ namespace comPort_wpf
         public ObservableCollection<Terminal> terminalRx { get; set; }
         public ObservableCollection<ComSearch_> listViewCom { get; set; }
 
-        public double GetWidthMainWindow()
-        {
-            return mainWindow.Width;
-        }
-
-        public void SetWidthMainWindow(object value)
-        {
-            mainWindow.Width = (double)value;
-        }
+        public double GetWidthMainWindow() => mainWindow.Width;
+        public void SetWidthMainWindow(object value) => mainWindow.Width = (double)value;
 
         //static double widthStoronaX = GetWidthMainWindow();
+        int X, Y;
 
-
-        int X = Convert.ToInt32(ConfigurationManager.AppSettings["X"]);
-        int Y = Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
+        //int X = Convert.ToInt32(ConfigurationManager.AppSettings["X"]);
+        //int Y = Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
 
         public MainWindow()
         {
             InitializeComponent();
+            settingsLoadTopLeftHeightWidth();
             //this.Show();
             // PointToScreen работает корректно
             //var a = PointToScreen(new Point(Left, Top)).ToString();
@@ -80,6 +81,9 @@ namespace comPort_wpf
             this.DataContext = MyPort;
             bool isChecked = (bool)btnStop_rx.IsChecked;
             btnStop = isChecked;
+
+            Xbox.Text = Convert.ToString(X) ;
+            Ybox.Text = Convert.ToString(Y);
             //System.Windows.Controls.Button btn = new System.Windows.Controls.Button();
             //btn.Content = "Created with C#";
             //ContextMenu contextmenu = new();
@@ -97,8 +101,77 @@ namespace comPort_wpf
             //contextmenu.Items.Add(mi);
             //btn.ContextMenu = contextmenu;
             //gridToolBar.Children.Add(btn);
-            var widthMainWindow = mainWindow.Width;
-    }
+            ////////////////////var widthMainWindow = mainWindow.Width;
+            ////////////////////X = (int)mainWindow.Width;
+            ////////////////////Y = (int)mainWindow.Height;
+            ////////////////////var xzzx = mainWindow.Title;
+            ////////////////////xzzx += " X =" + X + "," + " Y =" + Y;
+            ////////////////////mainWindow.Title = xzzx;
+        }
+
+
+        //public class SizeWindow
+        //{
+        //    int x;
+        //    int y;
+        //    // Создаем переменную делегата
+        //    RAzmerOknaHandler? taken;
+        //    public SizeWindow(int sum) => this.sum = sum;
+        //    // Регистрируем делегат
+        //    public void RegisterHandler(RAzmerOknaHandler del)
+        //    {
+        //        taken = del;
+        //    }
+        //    public void Add(int sum) => this.sum += sum;
+        //    public void Take(int sum)
+        //    {
+        //        if (this.sum >= sum)
+        //        {
+        //            this.sum -= sum;
+        //            // вызываем делегат, передавая ему сообщение
+        //            taken?.Invoke($"Со счета списано {sum} у.е.");
+        //        }
+        //        else
+        //        {
+        //            taken?.Invoke($"Недостаточно средств. Баланс: {this.sum} у.е.");
+        //        }
+        //    }
+        //}
+        private void appSettingsSet(string str,double X)
+        {
+            //int Y = Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
+            ConfigurationManager.AppSettings[str] = X.ToString();
+        }
+        private string appSettingsGet(string str)
+        {
+            string? result;
+            result = ConfigurationManager.AppSettings[str];
+            if (result == null) result = "";
+            return result;
+            //return Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
+        }
+        private void settingsSaveTopLeftHeightWidth()
+        {
+            settings.HeightMainWindow = mainWindow.Height;
+            settings.WidthMainWindow = mainWindow.Width;
+            settings.TopMainWindow = mainWindow.Top;
+            settings.LeftMainWindow = mainWindow.Left;
+            appSettingsSet("X",mainWindow.Top);
+            appSettingsSet("Y",mainWindow.Left);
+            settings.Save();
+            //X = Convert.ToInt32(appSettingsGet("X"));
+            //Y = Convert.ToInt32(appSettingsGet("Y"));
+            //MessageBox.Show(X + "  " + Y);
+        }
+        private void settingsLoadTopLeftHeightWidth()
+        {
+            mainWindow.Height = settings.HeightMainWindow;
+            mainWindow.Width = settings.WidthMainWindow;
+            mainWindow.Top = settings.TopMainWindow;
+            mainWindow.Left = settings.LeftMainWindow;
+            //X = Convert.ToInt32(appSettingsGet("X"));
+            //Y = Convert.ToInt32(appSettingsGet("Y"));
+        }
         private void Timer_0_Clock()
         {
             var timer = new System.Windows.Threading.DispatcherTimer();
@@ -144,8 +217,9 @@ namespace comPort_wpf
         }
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
+            //settingsSaveTopLeftHeightWidth();
             //try { 
-                MyPort.Close();
+            MyPort.Close();
             //}
             //catch (NullReferenceException) { System.Windows.MessageBox.Show("CommPort no initialize!!"); }
            this.Close(); // закрытие окна
@@ -235,15 +309,17 @@ namespace comPort_wpf
             Close_port();
         }
 
-        private void Exit_programm(object sender, MouseButtonEventArgs e) {
-            try { Close_port(); }
-            catch { System.Windows.MessageBox.Show("error close port"); }
-        }
+        //private void Exit_programm(object sender, MouseButtonEventArgs e) {
+        //    settingsSaveTopLeftHeightWidth();
+        //    try { Close_port(); }
+        //    catch { System.Windows.MessageBox.Show("error close port"); }
+        //}
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            settingsSaveTopLeftHeightWidth();
             try { Close_port(); }
             catch { System.Windows.MessageBox.Show("error close port"); }
-
+           // this.Close(); // закрытие окна
             //const string message = "Are you sure that you would like to close the form?";
             //const string caption = "Form Closing";
             //var result = System.Windows.Forms.MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
@@ -259,7 +335,7 @@ namespace comPort_wpf
         private void ComPortSettings(object sender, RoutedEventArgs e)
         {
             ComPortXAML comXAML = new();
-            //var a = PointToScreen(new Point(Left, Top)).ToString();
+           // var a = PointToScreen(new Point(Left, Top)).ToString();
             comXAML.ShowDialog();
         }
         private void Box_Click_Port(object sender, MouseButtonEventArgs e)
@@ -363,15 +439,15 @@ namespace comPort_wpf
             double widthStorona=0;
             if ((double)x>304) widthStorona = (double)x / 2;
             
-            if (Rx_Data.IsChecked == true) { TerminalRXList.Visibility = Visibility.Visible; mainWindow.Width += widthStorona; TerminalRXList.Width = widthStorona; }
-            else { TerminalRXList.Visibility = Visibility.Hidden; TerminalRXList.Width = 0; mainWindow.Width = widthStorona; }
+            if (Rx_Data.IsChecked == true) { TerminalRXList.Visibility = Visibility.Visible; TerminalRXList.Width = widthStorona; }
+            else { TerminalRXList.Visibility = Visibility.Hidden; TerminalRXList.Width = 0;  TerminalTXList.Width += widthStorona; }
         }
         private void Button_Tx_Data(object sender, EventArgs e) {
             var x = GetWidthMainWindow();
             double widtthStorona = 0;
             widtthStorona = (double)(x) / 2;
-            if (Tx_Data.IsChecked == true) { TerminalTXList.Visibility = Visibility.Visible; mainWindow.Width += widtthStorona; TerminalTXList.Width = widtthStorona; }
-            else { TerminalTXList.Visibility = Visibility.Hidden; TerminalTXList.Width = 0; mainWindow.Width = widtthStorona; }
+            if (Tx_Data.IsChecked == true) { TerminalTXList.Visibility = Visibility.Visible; TerminalTXList.Width = widtthStorona; }
+            else { TerminalTXList.Visibility = Visibility.Hidden; TerminalTXList.Width = 0;  TerminalRXList.Width += widtthStorona; }
         }
         //private void menu1(object sender, RoutedEventArgs e)
         //{
@@ -441,6 +517,26 @@ namespace comPort_wpf
             finally{Console.WriteLine("Executing finally block.");}
         }
         private void O_Programme_Click(object sender, RoutedEventArgs e) => MessageBox.Show("   Не до реплика ComPort ToolKit");
+
+        private void enterX(object sender, MouseButtonEventArgs e)
+        {
+            //X = (int)mainWindow.Width;
+            X = Convert.ToInt32(Xbox.Text);
+            Y = Convert.ToInt32(Ybox.Text);
+            //var xzzx = mainWindow.Title;
+           // xzzx =  "ComPort tool X =" + X + "," + " Y =" + Y;
+            mainWindow.Title = "ComPort tool X =" + X + "," + " Y =" + Y; ;
+        }
+
+        private void probn(object sender, SizeChangedEventArgs e)
+        {
+            MessageBox.Show("probn");
+        }
+
+       
+
+
+        // MessageBox.Show("probn");
     }
     public class StringToHex
     {

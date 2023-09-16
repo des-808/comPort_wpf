@@ -5,10 +5,18 @@
         xmlns:local="clr-namespace:comPort_wpf"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="av"
+        xmlns:p="clr-namespace:comPort_wpf"
         x:Class="comPort_wpf.MainWindow"
-        Title="ComPort tool" Height="420" Width="1200" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing" 
-        Top="{Binding X, Mode=TwoWay}" Left="{Binding Y, Mode=TwoWay}">
-
+        Title="ComPort tool" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing">
+       <!-- Height = "{Binding XPath=Settings1  , Path=HeightMainWindow, Mode=TwoWay}" 
+        Width =  "{Binding Source=(x:Static p:Setings1), Path=WidthMainWindow, Mode=TwoWay}"
+        Top =    "{Binding Source=(x:Static p:Setings1), Path=TopMainWindow, Mode=TwoWay}" 
+        Left=    "{Binding Source=(x:Static p:Setings1), Path=LeftMainWindow, Mode=TwoWay}" 
+    
+    Title="ComPort tool" Height="420" Width="1200" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing"
+    Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }" 
+    Left ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }" 
+    PreviewDragEnter="probn" SizeChanged="probn"-->
     <Window.Resources>
         <!--TargetType="{x:Type TextBlock}" TargetType="{x:Type TextBox}"-->
         <SolidColorBrush x:Key="ColorBackground" Color="#FFB1ACAC" />
@@ -264,6 +272,9 @@
         </ContextMenu>
 
     </Window.Resources>
+    <av:Window.DataContext>
+        <p:Settings1/>
+    </av:Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -413,12 +424,19 @@
             </DockPanel>
         </Grid>
 		<Grid  Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridSignals" Grid.Height="25">
-			
-		</Grid>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="40" x:Name="Xbox" MouseUp="enterX" />
+                <TextBox Width="40" x:Name="Ybox"/>
+            </StackPanel>
+            
+        </Grid>
 
     </Grid>
 </Window>
 
+
+<!--Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }"
+Left="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }"-->
 <!--MouseLeftButtonDown="Box_Click_Port"    
     MouseLeftButtonDown="Box_Click_Boudrate"
     MouseLeftButtonDown="Box_Click_Parity"  

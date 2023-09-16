@@ -12,7 +12,7 @@ namespace comPort_wpf {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
     internal sealed partial class Settings1 : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings1 defaultInstance = ((Settings1)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings1())));
@@ -23,66 +23,135 @@ namespace comPort_wpf {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("wert")]
-        public string Параметр {
+        [global::System.Configuration.DefaultSettingValueAttribute("420")]
+        public double HeightMainWindow {
             get {
-                return ((string)(this["Параметр"]));
+                return ((double)(this["HeightMainWindow"]));
+            }
+            set {
+                this["HeightMainWindow"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sdf")]
-        public string Параметр1 {
+        [global::System.Configuration.DefaultSettingValueAttribute("1200")]
+        public double WidthMainWindow {
             get {
-                return ((string)(this["Параметр1"]));
+                return ((double)(this["WidthMainWindow"]));
+            }
+            set {
+                this["WidthMainWindow"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("xff")]
-        public string Параметр2 {
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
+        public double TopComPortSet {
             get {
-                return ((string)(this["Параметр2"]));
+                return ((double)(this["TopComPortSet"]));
+            }
+            set {
+                this["TopComPortSet"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("xcv")]
-        public string Параметр3 {
+        [global::System.Configuration.DefaultSettingValueAttribute("270")]
+        public double LeftComPortSet {
             get {
-                return ((string)(this["Параметр3"]));
+                return ((double)(this["LeftComPortSet"]));
+            }
+            set {
+                this["LeftComPortSet"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("se")]
-        public string Параметр4 {
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double TopMainWindow {
             get {
-                return ((string)(this["Параметр4"]));
+                return ((double)(this["TopMainWindow"]));
+            }
+            set {
+                this["TopMainWindow"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Параметр5 {
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double LeftMainWindow {
             get {
-                return ((bool)(this["Параметр5"]));
+                return ((double)(this["LeftMainWindow"]));
+            }
+            set {
+                this["LeftMainWindow"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("234")]
-        public int Параметр6 {
+        [global::System.Configuration.DefaultSettingValueAttribute("Com1")]
+        public string Port {
             get {
-                return ((int)(this["Параметр6"]));
+                return ((string)(this["Port"]));
+            }
+            set {
+                this["Port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115200")]
+        public int BoudRate {
+            get {
+                return ((int)(this["BoudRate"]));
+            }
+            set {
+                this["BoudRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Parity {
+            get {
+                return ((string)(this["Parity"]));
+            }
+            set {
+                this["Parity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int Data {
+            get {
+                return ((int)(this["Data"]));
+            }
+            set {
+                this["Data"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Stop {
+            get {
+                return ((string)(this["Stop"]));
+            }
+            set {
+                this["Stop"] = value;
             }
         }
     }
