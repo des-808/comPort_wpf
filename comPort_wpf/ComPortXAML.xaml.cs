@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics.Tracing;
+using System.Configuration;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static comPort_wpf.MainWindow;
 
 namespace comPort_wpf
@@ -28,16 +17,16 @@ namespace comPort_wpf
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
         //ComSearch_ search_Com;
-        string stroka ="";
-        static public SerialPort MyPort;// = new("COM0", 115200,Parity.None,8, StopBits.One);
+        string stroka = "";
+        public static SerialPort? MyPort;// = new("COM0", 115200,Parity.None,8, StopBits.One);
         Thread writeThread = new Thread(Write);
         static bool _continue = true;
         // Объявляем событие Sobitie на основе делегата
         //public event Mydelegate Sobitie;
-        Settings1 settings = new Settings1();
+        private Settings1 settings = new Settings1();
         public ComPortXAML()
         {
-            
+
             InitializeComponent();
             settingsLoadTopLeft();
             ports = SerialPort.GetPortNames();
@@ -47,21 +36,21 @@ namespace comPort_wpf
             //DataBox  .Items.Clear();
             //ParityBox.Items.Clear();
             //StopBox  .Items.Clear();
-            foreach (string p in ports      ) { PortBox  .Items.Add(p);}
-            foreach (string b in arrBoudRate) { BoudBox  .Items.Add(b);}
-            foreach (string b in arrBit     ) { DataBox  .Items.Add(b);}
-            foreach (string b in arrParitet ) { ParityBox.Items.Add(b);}
-            foreach (string b in arrStop    ) { StopBox  .Items.Add(b);}
-            PortBox.SelectedValue  = comInitStruct;
-            BoudBox.SelectedItem   = comInitStruct.baudRat;
-            ParityBox.SelectedItem = comInitStruct.parity;
-            DataBox.SelectedItem   = comInitStruct.dBit;
-            StopBox.SelectedItem   = comInitStruct.sBit;
-            MyPort = new(comInitStruct.pName, comInitStruct.baudRat,(Parity)comInitStruct.parity,comInitStruct.dBit, comInitStruct.sBit);
+            foreach (string p in ports) { PortBox.Items.Add(p); }
+            foreach (string b in arrBoudRate) { BoudBox.Items.Add(b); }
+            foreach (string b in arrBit) { DataBox.Items.Add(b); }
+            foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
+            foreach (string b in arrStop) { StopBox.Items.Add(b); }
+            PortBox.SelectedItem = ComInitStruct.pName;
+            BoudBox.SelectedValue = ComInitStruct.baudRat;
+            ParityBox.SelectedValue = ComInitStruct.parity;
+            DataBox.SelectedValue = ComInitStruct.dBit;
+            StopBox.SelectedValue = ComInitStruct.sBit;
+            MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
 
         }
 
-        
+
         //Cоздаем метод для события, который просто будет обращаться к событию
         public void MetoddlyaSobitiya()
         {
@@ -78,76 +67,98 @@ namespace comPort_wpf
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
             settingsSaveTopLeft();
-            //MessageBox.Show( Convert.ToString(StringToParity((string)ParityBox.SelectedValue)));
-
-            comInitStruct.pName = (string)PortBox.SelectedValue;
-            comInitStruct.baudRat = Convert.ToInt32(BoudBox.SelectedValue);
-            comInitStruct.parity = (Parity)StringToParity((string)ParityBox.SelectedValue);// (Parity)Convert.ToInt32(ParityBox.SelectedValue);
-            comInitStruct.dBit = Convert.ToInt32(DataBox.SelectedValue);
-            comInitStruct.sBit = (StopBits)StringToStopBit((string)StopBox.SelectedValue);//(StopBits)Convert.ToInt32(StopBox.SelectedValue);
-            MyPort = new(comInitStruct.pName, comInitStruct.baudRat, (Parity)comInitStruct.parity, comInitStruct.dBit, comInitStruct.sBit);
+            ComInitStruct.pName =   (string)PortBox.SelectedValue;
+            ComInitStruct.baudRat = Convert.ToInt32(BoudBox.SelectedValue);
+            ComInitStruct.parity =  (Parity)StringToParity((string)ParityBox.SelectedValue);
+            ComInitStruct.dBit =    Convert.ToInt32(DataBox.SelectedValue);
+            ComInitStruct.sBit =    (StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
 
 
+            ConfigurationManager.AppSettings["Port"] = (string)PortBox.SelectedValue;
+            ConfigurationManager.AppSettings["BoudRate"] = BoudBox.SelectedValue.ToString();
+            ConfigurationManager.AppSettings["Parity"] = ParityBox.SelectedValue.ToString();
+            ConfigurationManager.AppSettings["Data"] = DataBox.SelectedValue.ToString();
+            ConfigurationManager.AppSettings["Stop"] = StopBox.SelectedValue.ToString();
 
-            //MessageBox.Show(settings.Top + " "+settings.Left + " ");
+            //MessageBox.Show(Convert.ToString(Convert.ToDouble((string)StopBox.SelectedValue)));
+            MyPort = new(
+                          ConfigurationManager.AppSettings["Port"],
+                          Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
+                          (Parity)StringToParity(ConfigurationManager.AppSettings["Parity"]),
+                          Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
+                          (StopBits)Convert.ToDouble(ConfigurationManager.AppSettings["Stop"]));
+            //MyPort = new(comInitStruct.pName, comInitStruct.baudRat, (Parity)comInitStruct.parity, comInitStruct.dBit, (StopBits)comInitStruct.sBit);
+            //SaveSettingsCom();
             Close();
         }
-        private int StringToParity(string str) {
-            //string[] arrStr = new[]{ "q"};
-            int i = 0;
-            if (str != null) { 
-            for (; i<arrParitet.Length; i++)
-                {
-                    if (Equals(arrParitet[i] , str)) { return i; };
-                }
-            }
-            return i=0; 
+        private void SaveSettingsCom()
+        {//public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
+         //                                      Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
+         //                              (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
+         //                                      Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
+         //                            (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
+
+            //settings.Port       = comInitStruct.pName;
+            //settings.BoudRate   = comInitStruct.baudRat;
+            //settings.Parity     = Convert.ToString(comInitStruct.parity);
+            //settings.Data       = comInitStruct.dBit;
+            //settings.Stop       = Convert.ToString(comInitStruct.sBit);
+            //settings.Save();
         }
-        private int StringToStopBit(string str)
+        private void LoadSettings()
         {
+            //comInitStruct.pName   = //(string)PortBox.SelectedValue;
+            //comInitStruct.baudRat = //Convert.ToInt32(BoudBox.SelectedValue);
+            //comInitStruct.parity  = //(Parity)StringToParity((string)ParityBox.SelectedValue);
+            //comInitStruct.dBit    = //Convert.ToInt32(DataBox.SelectedValue);
+            //comInitStruct.sBit    = //(StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
+        }
+        private int StringToParity(string str)
+        {
+            //string[] arrStr = new[]{ "q"};
             int i = 0;
             if (str != null)
             {
-                for (; i < arrStop.Length; i++)
+                for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrStop[i] ,str)) { return i; };
+                    if (Equals(arrParitet[i], str)) { return i; };
                 }
             }
             return i = 0;
         }
-        
         private void BtnCancel(object sender, RoutedEventArgs e)
         {
             Close();
-        } 
-        private void settingsSaveTopLeft() {
+        }
+        private void settingsSaveTopLeft()
+        {
             settings.TopComPortSet = window_settings_comPort_tools.Top;
             settings.LeftComPortSet = window_settings_comPort_tools.Left;
             settings.Save();
         }
-        private void settingsLoadTopLeft() {
+        private void settingsLoadTopLeft()
+        {
             window_settings_comPort_tools.Top = settings.TopComPortSet;
             window_settings_comPort_tools.Left = settings.LeftComPortSet;
         }
         private void Rescan_ComPort(object sender, RoutedEventArgs e)
-        {  
+        {
             listViewCom.Clear();
-           SearchPorts(out ports);
-            PortBox.Items.Clear();
-
-            //string Port = "";
+            SearchPorts(out ports);
+            //PortBox.Items.Clear();
             string Status = "";
-            Image icon = null;
+            Image? icon = null;
             string? error;
             MyPort.ReadTimeout = 200;//500
             MyPort.WriteTimeout = 200;
-            foreach (string p in ports) {
+            foreach (string p in ports)
+            {
                 // Port = p.ToString();
                 MyPort.PortName = p;
-                try { MyPort.Open();}
-                catch(System.IO.IOException ev) { Status = "Не доступен ";error = ev.ToString();goto metka; }
+                try { MyPort.Open(); }
+                catch (System.IO.IOException ev) { Status = "Не доступен "; error = ev.ToString(); goto metka; }
                 _continue = true;
-                if(writeThread.IsAlive){  writeThread.Start(); }
+                if (writeThread.IsAlive) { writeThread.Start(); }
                 //else { writeThread. }
                 //try {//if (MyPort.IsOpen == true) { Status = "Порт открыт "; }else { Status = "Порт не в работе "; }
                 //}    catch(Exception ex) { MessageBox.Show(ex.ToString());}
@@ -155,8 +166,10 @@ namespace comPort_wpf
                 //writeThread.Join();
 
                 writeThread.Interrupt();
-                metka:
+            metka:
                 MyPort.Close();
+                PortBox.Items.Clear();
+                foreach (string v in ports) { PortBox.Items.Add(v); }
                 listViewCom.Add(new ComSearch_ { Img = icon, PorT = p, StatuS = Status });
             }
             //writeThread.Join();
@@ -185,44 +198,48 @@ namespace comPort_wpf
                 {
                     MyPort.WriteLine(message);
                 }
-                catch (TimeoutException) { _continue = false;  }
+                catch (TimeoutException) { _continue = false; }
             }
         }
 
         private void selectorPortBox(object sender, SelectionChangedEventArgs e)
         {
-            try {
+            try
+            {
                 //MessageBox.Show(PortBox.SelectedItem.ToString());
-                PortBox.Text = PortBox.SelectedItem.ToString();
+                PortBox.Text = Convert.ToString(PortBox.SelectedItem);
+                PortBox.TabIndex = ParityBox.TabIndex;
             }
-            catch(NullReferenceException ex) { MessageBox.Show(ex.ToString()); }
-           
+            catch (NullReferenceException ex) { MessageBox.Show(ex.ToString()); }
+
         }
         private void selectorBoudBox(object sender, SelectionChangedEventArgs e)
         {
-            BoudBox.Text = BoudBox.SelectedItem.ToString();
-            var select  =  BoudBox.SelectedIndex;
-            BoudBox.TabIndex = select;
+            BoudBox.Text = Convert.ToString(BoudBox.SelectedItem);
+            //var select  =  BoudBox.SelectedIndex;
+            BoudBox.TabIndex = BoudBox.SelectedIndex;//select
         }
         private void selectorDataBox(object sender, SelectionChangedEventArgs e)
         {
-            DataBox.Text = DataBox.SelectedItem.ToString();
+            DataBox.Text = Convert.ToString(DataBox.SelectedItem);
+            DataBox.TabIndex = DataBox.SelectedIndex;
         }
         private void selectorParityBox(object sender, SelectionChangedEventArgs e)
         {
-            ParityBox.Text = ParityBox.SelectedItem.ToString();
+            ParityBox.Text = Convert.ToString(ParityBox.SelectedItem);
+            ParityBox.TabIndex = ParityBox.SelectedIndex;
         }
         private void selectorStopBox(object sender, SelectionChangedEventArgs e)
         {
-            StopBox.Text = StopBox.SelectedItem.ToString();
+            StopBox.Text = Convert.ToString(StopBox.SelectedItem);
+            StopBox.TabIndex = StopBox.SelectedIndex;
         }
         private void Click_selectPortNameBtn(object sender, RoutedEventArgs e)
         {
-           // var tmp = listViewCom.SelectedItem.ToString();
-           
-           PortBox.Text = ListViewCom_.SelectedItems.ToString();
+            // var tmp = listViewCom.SelectedItem.ToString();
 
-            
+            PortBox.Text = Convert.ToString(ListViewCom_.SelectedItems);
+            PortBox.TabIndex = ListViewCom_.SelectedIndex;
             //SearchPorts.Name = listViewCom.Select()
         }
 
@@ -234,7 +251,7 @@ namespace comPort_wpf
         private void listview_item_selected(object sender, SelectionChangedEventArgs e)
         {
             //if(ListViewCom_.SelectedItem != null) { ListViewCom_.Remove(ListViewCom_.) }
-           // var tmp = ListViewCom_.SelectedIndex.ToString();
+            // var tmp = ListViewCom_.SelectedIndex.ToString();
             ListViewCom_.SelectedIndex = comSelectedValue = Int32.Parse(ListViewCom_.SelectedIndex.ToString());
             // MessageBox.Show(tmp);
             //var listtt = GetSelectedItem(listViewCom);
@@ -242,42 +259,38 @@ namespace comPort_wpf
 
 
 
-        public static string GetSelectedItem(ListView list)
-        {
-            foreach (ListViewItem item in list.Items)
-            {
-                if (item.IsSelected)
-                    return item.Name;
-            }
-            return null;
-        }
+        //public static string GetSelectedItem(ListView list)
+        //{
+        //    foreach (ListViewItem item in list.Items)
+        //    {
+        //        if (item.IsSelected)
+        //            return item.Name;
+        //    }
+        //    return null;
+        //}
 
         private void ports_window_open_close(object sender, RoutedEventArgs e)
         {
-            if (!ports_window_open_close_bool) { 
-                btnPorts.Content = "Порты>>"; 
-                ports_window_open_close_bool = true; 
-                CanvasVisiblity.Visibility = Visibility.Hidden; 
+            if (!ports_window_open_close_bool)
+            {
+                btnPorts.Content = "Порты>>";
+                ports_window_open_close_bool = true;
+                CanvasVisiblity.Visibility = Visibility.Hidden;
                 window_settings_comPort_tools.Width = 195;
                 window_settings_comPort_tools.MinWidth = 195;
-                window_settings_comPort_tools.MaxWidth = 195; }
-            else { 
-                btnPorts.Content = "Порты<<"; 
-                ports_window_open_close_bool = false; 
-                CanvasVisiblity.Visibility = Visibility.Visible; 
+                window_settings_comPort_tools.MaxWidth = 195;
+            }
+            else
+            {
+                btnPorts.Content = "Порты<<";
+                ports_window_open_close_bool = false;
+                CanvasVisiblity.Visibility = Visibility.Visible;
                 window_settings_comPort_tools.Width = 380;
                 window_settings_comPort_tools.MinWidth = 380;
-                window_settings_comPort_tools.MaxWidth = 380; }
+                window_settings_comPort_tools.MaxWidth = 380;
+            }
         }
     }
-
-
-
-    
-    
-    
-    
-    
 }
 
 

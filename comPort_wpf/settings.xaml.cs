@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace comPort_wpf
@@ -48,11 +47,9 @@ namespace comPort_wpf
 
         }
 
-        private void rts(object sender, DragEventArgs e)
-        {
-        }
+        //       private void rts(object sender, DragEventArgs e){}
 
-        private void rts(object sender, RoutedEventArgs e) => Data.Value = textbox1.Text;
+        //      private void rts(object sender, RoutedEventArgs e) => Data.Value = textbox1.Text;
 
         private void TerminalProbnList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

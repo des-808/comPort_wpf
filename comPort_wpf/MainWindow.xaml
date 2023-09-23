@@ -17,6 +17,9 @@
     Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }" 
     Left ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }" 
     PreviewDragEnter="probn" SizeChanged="probn"-->
+    <!--<av:Window.DataContext>
+     <p:Settings1/>
+ </av:Window.DataContext>-->
     <Window.Resources>
         <!--TargetType="{x:Type TextBlock}" TargetType="{x:Type TextBox}"-->
         <SolidColorBrush x:Key="ColorBackground" Color="#FFB1ACAC" />
@@ -273,7 +276,7 @@
 
     </Window.Resources>
     <av:Window.DataContext>
-        <p:Settings1/>
+            <p:Settings1/>
     </av:Window.DataContext>
 
     <Grid>
@@ -425,7 +428,7 @@
         </Grid>
 		<Grid  Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridSignals" Grid.Height="25">
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="40" x:Name="Xbox" MouseUp="enterX" />
+                <TextBox Width="40" x:Name="Xbox"/>
                 <TextBox Width="40" x:Name="Ybox"/>
             </StackPanel>
             

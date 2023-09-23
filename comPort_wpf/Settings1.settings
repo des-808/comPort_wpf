@@ -20,20 +20,5 @@
     <Setting Name="LeftMainWindow" Type="System.Double" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="Port" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Com1</Value>
-    </Setting>
-    <Setting Name="BoudRate" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">115200</Value>
-    </Setting>
-    <Setting Name="Parity" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="Data" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8</Value>
-    </Setting>
-    <Setting Name="Stop" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
