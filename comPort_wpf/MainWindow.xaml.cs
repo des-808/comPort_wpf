@@ -255,12 +255,13 @@ namespace comPort_wpf
             }
             catch (UnauthorizedAccessException) { i = 1; /*MessageBox.Show(comInitStruct.pName+" уже используется");*/ }
             catch (FileNotFoundException) { i = 2;/* MessageBox.Show(comInitStruct.pName + " Не существует");*/ }
-            catch (System.IO.IOException xc){ i = 3; MessageBox.Show($"Превышен таймаут подключения к: {MyPort.PortName}"); }
+            catch (System.IO.IOException){ i = 3; /*MessageBox.Show($"Превышен таймаут подключения к: {MyPort.PortName}");*/ }
             finally
             {
                 if (i > 0) { _port = false; ToolBarComDeInit(); }
                 if (i == 1) { toolbar_sostoyanie.Text = ComInitStruct.pName + " уже используется"; }
                 else if (i == 2) { toolbar_sostoyanie.Text = ComInitStruct.pName + " Не существует"; }
+                else if (i == 3) { toolbar_sostoyanie.Text = ComInitStruct.pName + " Превышен таймаут подключения"; }
             }
             return _port;
         }
