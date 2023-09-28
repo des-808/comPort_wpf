@@ -94,5 +94,77 @@ namespace comPort_wpf {
                 this["LeftMainWindow"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ComSearchWindow {
+            get {
+                return ((bool)(this["ComSearchWindow"]));
+            }
+            set {
+                this["ComSearchWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Panel_Signals {
+            get {
+                return ((bool)(this["Panel_Signals"]));
+            }
+            set {
+                this["Panel_Signals"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Panel_Clock {
+            get {
+                return ((bool)(this["Panel_Clock"]));
+            }
+            set {
+                this["Panel_Clock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Panel_ToolBar {
+            get {
+                return ((bool)(this["Panel_ToolBar"]));
+            }
+            set {
+                this["Panel_ToolBar"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Sent_Messages_Panel {
+            get {
+                return ((bool)(this["Sent_Messages_Panel"]));
+            }
+            set {
+                this["Sent_Messages_Panel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Received_Messages_Panel {
+            get {
+                return ((bool)(this["Received_Messages_Panel"]));
+            }
+            set {
+                this["Received_Messages_Panel"] = value;
+            }
+        }
     }
 }

@@ -66,14 +66,12 @@ namespace comPort_wpf
             InitializeComponent();
             settingsLoadTopLeftHeightWidth();
             Settings1 settings = new Settings1();
-            //initCom();
-            //this.Show();
-            // PointToScreen работает корректно
-            //var a = PointToScreen(new Point(Left, Top)).ToString();
+            Signals_Visible();
+            Clock_Visible();
+            ToolBar_Visible();
             Timer_0_Clock();
             SearchPorts(out ports);
             ToolBarComDeInit();
-            //comInitStruct.print();
             terminalTx = new ObservableCollection<Terminal>(); TerminalTXList.ItemsSource = terminalTx;
             terminalRx = new ObservableCollection<Terminal>(); TerminalRXList.ItemsSource = terminalRx;
             this.DataContext = MyPort;
@@ -185,11 +183,23 @@ namespace comPort_wpf
         private static void SearchPorts(out string[] ports) => ports = SerialPort.GetPortNames();
         private void ComPortInit()
         {
-            MyPort.PortName = ComInitStruct.pName;//  "COM7";
-            MyPort.BaudRate = ComInitStruct.baudRat;//  115200;
-            MyPort.Parity = ComInitStruct.parity;// Parity.None ;//Parity.None
-            MyPort.DataBits = ComInitStruct.dBit;//  8;
-            MyPort.StopBits = ComInitStruct.sBit;//  StopBits.One;
+            //MyPort.PortName = ComInitStruct.pName;//  "COM7";
+            //MyPort.BaudRate = ComInitStruct.baudRat;//  115200;
+            //MyPort.Parity = ComInitStruct.parity;// Parity.None ;//Parity.None
+            //MyPort.DataBits = ComInitStruct.dBit;//  8;
+            //MyPort.StopBits = ComInitStruct.sBit;//  StopBits.One;
+
+            //MyPort = new(
+            //              ConfigurationManager.AppSettings["Port"],
+            //              Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
+            //              (Parity)StringToParity(ConfigurationManager.AppSettings["Parity"]),
+            //              Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
+            //              (StopBits)Convert.ToDouble(ConfigurationManager.AppSettings["Stop"]));
+            MyPort.PortName = ConfigurationManager.AppSettings["Port"];//  "COM7";
+            MyPort.BaudRate = Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]);//  115200;
+            MyPort.Parity =   (Parity)StringToParity(ConfigurationManager.AppSettings["Parity"]);// Parity.None ;//Parity.None
+            MyPort.DataBits = Convert.ToInt32(ConfigurationManager.AppSettings["Data"]);//  8;
+            MyPort.StopBits = (StopBits)Convert.ToDouble(ConfigurationManager.AppSettings["Stop"]);//  StopBits.One;
         }
         private void ToolBarComInit()
         {
@@ -267,7 +277,7 @@ namespace comPort_wpf
         }
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
             char[] delimiterCharss = { '\r', '\n' };
@@ -398,46 +408,45 @@ namespace comPort_wpf
             mStop.PlacementTarget = sender as System.Windows.Controls.Button;
             mStop.IsOpen = true;
         }
-        private void menuItem1_Click(object sender, System.EventArgs e)
+        //private void menuItem1_Click(object sender, System.EventArgs e)
+        //{
+        //    // Create a new OpenFileDialog and display it.
+        //    OpenFileDialog fd = new OpenFileDialog();
+        //    fd.DefaultExt = "*.*";
+        //    fd.ShowDialog();
+        //}
+        private void Button_Click_Clock_Visible(object sender, RoutedEventArgs e)
         {
-            // Create a new OpenFileDialog and display it.
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.DefaultExt = "*.*";
-            fd.ShowDialog();
+            if (settings.Panel_Clock){ settings.Panel_Clock = false;settings.Save();}
+            else{settings.Panel_Clock = true;settings.Save();}
+            Clock_Visible();
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        void Clock_Visible()
         {
-            //ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
-            //cm.PlacementTarget = sender as System.Windows.Controls.Button;
-            //cm.IsOpen = true;
-            if (btnVisibleClock)
-            {
-                this.StBClock.Visibility = Visibility.Collapsed; btnVisibleClock = false;
-                //this.gridRx.Visibility = Visibility.Collapsed; 
-                //this.stbsender.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                this.StBClock.Visibility = Visibility.Visible; btnVisibleClock = true;
-                //this.gridRx.Language.IetfLanguageTag = Language.IetfLanguageTag ;
-                //this.stbsender.Visibility = Visibility.Visible;
-            }
-
-
-
+            this.SatusBarClock.Visibility = settings.Panel_Clock ? Visibility.Collapsed : Visibility.Visible;
+            checkClock.IsChecked = !settings.Panel_Clock;
         }
-        private void Button_Click_hidden(object sender, EventArgs e)
+        private void Button_Click_ToolBar(object sender, EventArgs e)
         {
-            if (StecPanel_Settings.Visibility == Visibility) { StecPanel_Settings.Visibility = Visibility.Hidden; mainWindow.Background = StecPanel_Settings.Background; }
-            else StecPanel_Settings.Visibility = Visibility.Visible;
+            if (settings.Panel_ToolBar) { settings.Panel_ToolBar = false;settings.Save();}
+            else { settings.Panel_ToolBar = true;settings.Save();}
+            ToolBar_Visible();
+        }
+        void ToolBar_Visible()
+        {
+            if (!settings.Panel_ToolBar) { StecPanel_ToolBar.Visibility = Visibility.Hidden; mainWindow.Background = StecPanel_ToolBar.Background;checkToolBar.IsChecked = settings.Panel_ToolBar; }
+            else StecPanel_ToolBar.Visibility = Visibility.Visible; checkToolBar.IsChecked = settings.Panel_ToolBar;
         }
         private void Button_Click_Signals(object sender, EventArgs e)
         {
-            if (checkSignals.IsChecked == true) { gridSignals.Height = 25; gridSignals.Visibility = Visibility.Visible; }
-            else { gridSignals.Height = 0; gridSignals.Visibility = Visibility.Hidden; mainWindow.Height = 445; }
-            //mainWindow.Height = 420; mainWindow.MinHeight = 300; 
-            //if (StecPanel_Settings.Visibility == Visibility) { mainWindow.Height = Visibility.Hidden; mainWindow. = StecPanel_Settings.Background; }
-            //else StecPanel_Settings.Visibility = Visibility.Visible;
+            if(settings.Panel_Signals){settings.Panel_Signals = false;settings.Save();}
+            else { settings.Panel_Signals = true;settings.Save(); }
+            Signals_Visible();
+        }
+        void Signals_Visible()
+        {
+            if (settings.Panel_Signals) { gridSignals.Height = 25; gridSignals.Visibility = Visibility.Visible; checkSignals.IsChecked = settings.Panel_Signals; }
+            else { gridSignals.Height = 0; gridSignals.Visibility = Visibility.Hidden; mainWindow.Height = 445; checkSignals.IsChecked = settings.Panel_Signals; }
         }
         private void Button_Rx_Data(object sender, EventArgs e)
         {
@@ -535,7 +544,28 @@ namespace comPort_wpf
 
 
         // MessageBox.Show("probn");
+
+
+        public int StringToParity(string str)
+        {
+            //string[] arrStr = new[]{ "q"};
+            int i = 0;
+            if (str != null)
+            {
+                for (; i < arrParitet.Length; i++)
+                {
+                    if (Equals(arrParitet[i], str)) { return i; };
+                }
+            }
+            return i = 0;
+        }
+        private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
+        private string[] arrBit = new[] { "5", "6", "7", "8" };
+        private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
+        private string[] arrStop = new[] { "1", "1.5", "2" };
+
     }
+    
     public class StringToHex
     {
         private string hexString = "";

@@ -12,11 +12,11 @@ namespace comPort_wpf
 {
     public partial class ComPortXAML : Window
     {
-        private bool ports_window_open_close_bool = true;
+        //private bool ports_window_open_close_bool = true;
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
-        //ComSearch_ search_Com;
+        ComSearch_ search_Com;
         string stroka = "";
         public static SerialPort? MyPort;// = new("COM0", 115200,Parity.None,8, StopBits.One);
         Thread writeThread = new Thread(Write);
@@ -29,6 +29,8 @@ namespace comPort_wpf
 
             InitializeComponent();
             settingsLoadTopLeft();
+            //CanvasVisiblity.Visibility = (settings.ComSearchWindow)? Visibility.Hidden:Visibility.Visible;
+            ports_window_open_cloce_func();
             ports = SerialPort.GetPortNames();
             listViewCom = new ObservableCollection<ComSearch_>(); ListViewCom_.ItemsSource = listViewCom;
             //PortBox  .Items.Clear();
@@ -36,16 +38,27 @@ namespace comPort_wpf
             //DataBox  .Items.Clear();
             //ParityBox.Items.Clear();
             //StopBox  .Items.Clear();
-            foreach (string p in ports) { PortBox.Items.Add(p); }
+            foreach (string b in ports) { PortBox.Items.Add(b); }
             foreach (string b in arrBoudRate) { BoudBox.Items.Add(b); }
             foreach (string b in arrBit) { DataBox.Items.Add(b); }
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
-            PortBox.SelectedItem = ComInitStruct.pName;
-            BoudBox.SelectedValue = ComInitStruct.baudRat;
-            ParityBox.SelectedValue = ComInitStruct.parity;
-            DataBox.SelectedValue = ComInitStruct.dBit;
-            StopBox.SelectedValue = ComInitStruct.sBit;
+            PortBox.Text = ConfigurationManager.AppSettings["Port"].ToString();
+            //PortBox.SelectedIndex = comSelectedValue;
+
+            //PortBox.Text = ComInitStruct.pName.ToString();
+            //BoudBox.Text = ComInitStruct.baudRat.ToString();
+            //DataBox.Text = Convert.ToInt32(ComInitStruct.dBit).ToString();
+            //ParityBox.Text = (Convert.ToInt32(ComInitStruct.parity).ToString());
+            //StopBox.Text = Convert.ToDouble(ComInitStruct.sBit).ToString();
+
+            PortBox.Text = ConfigurationManager.AppSettings["Port"];
+            BoudBox.Text = (ConfigurationManager.AppSettings["BoudRate"]);
+            ParityBox.Text = (ConfigurationManager.AppSettings["Parity"]);
+            DataBox.Text = (ConfigurationManager.AppSettings["Data"]);
+            StopBox.Text = (ConfigurationManager.AppSettings["Stop"]);
+
+
             MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
 
         }
@@ -67,11 +80,11 @@ namespace comPort_wpf
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
             settingsSaveTopLeft();
-            ComInitStruct.pName =   (string)PortBox.SelectedValue;
-            ComInitStruct.baudRat = Convert.ToInt32(BoudBox.SelectedValue);
-            ComInitStruct.parity =  (Parity)StringToParity((string)ParityBox.SelectedValue);
-            ComInitStruct.dBit =    Convert.ToInt32(DataBox.SelectedValue);
-            ComInitStruct.sBit =    (StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
+            //ComInitStruct.pName =   (string)PortBox.SelectedValue;
+            //ComInitStruct.baudRat = Convert.ToInt32(BoudBox.SelectedValue);
+            //ComInitStruct.parity =  (Parity)StringToParity((string)ParityBox.SelectedValue);
+            //ComInitStruct.dBit =    Convert.ToInt32(DataBox.SelectedValue);
+            //ComInitStruct.sBit =    (StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
 
 
             ConfigurationManager.AppSettings["Port"] = (string)PortBox.SelectedValue;
@@ -91,28 +104,28 @@ namespace comPort_wpf
             //SaveSettingsCom();
             Close();
         }
-        private void SaveSettingsCom()
-        {//public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
-         //                                      Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
-         //                              (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
-         //                                      Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
-         //                            (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
+        //private void SaveSettingsCom()
+        //{//public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
+        // //                                      Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
+        // //                              (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
+        // //                                      Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
+        // //                            (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
 
-            //settings.Port       = comInitStruct.pName;
-            //settings.BoudRate   = comInitStruct.baudRat;
-            //settings.Parity     = Convert.ToString(comInitStruct.parity);
-            //settings.Data       = comInitStruct.dBit;
-            //settings.Stop       = Convert.ToString(comInitStruct.sBit);
-            //settings.Save();
-        }
-        private void LoadSettings()
-        {
-            //comInitStruct.pName   = //(string)PortBox.SelectedValue;
-            //comInitStruct.baudRat = //Convert.ToInt32(BoudBox.SelectedValue);
-            //comInitStruct.parity  = //(Parity)StringToParity((string)ParityBox.SelectedValue);
-            //comInitStruct.dBit    = //Convert.ToInt32(DataBox.SelectedValue);
-            //comInitStruct.sBit    = //(StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
-        }
+        //    //settings.Port       = comInitStruct.pName;
+        //    //settings.BoudRate   = comInitStruct.baudRat;
+        //    //settings.Parity     = Convert.ToString(comInitStruct.parity);
+        //    //settings.Data       = comInitStruct.dBit;
+        //    //settings.Stop       = Convert.ToString(comInitStruct.sBit);
+        //    //settings.Save();
+        //}
+        //private void LoadSettings()
+        //{
+        //    //comInitStruct.pName   = //(string)PortBox.SelectedValue;
+        //    //comInitStruct.baudRat = //Convert.ToInt32(BoudBox.SelectedValue);
+        //    //comInitStruct.parity  = //(Parity)StringToParity((string)ParityBox.SelectedValue);
+        //    //comInitStruct.dBit    = //Convert.ToInt32(DataBox.SelectedValue);
+        //    //comInitStruct.sBit    = //(StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
+        //}
         private int StringToParity(string str)
         {
             //string[] arrStr = new[]{ "q"};
@@ -206,9 +219,8 @@ namespace comPort_wpf
         {
             try
             {
-                //MessageBox.Show(PortBox.SelectedItem.ToString());
                 PortBox.Text = Convert.ToString(PortBox.SelectedItem);
-                PortBox.TabIndex = ParityBox.TabIndex;
+                PortBox.TabIndex = PortBox.SelectedIndex;
             }
             catch (NullReferenceException ex) { MessageBox.Show(ex.ToString()); }
 
@@ -216,7 +228,6 @@ namespace comPort_wpf
         private void selectorBoudBox(object sender, SelectionChangedEventArgs e)
         {
             BoudBox.Text = Convert.ToString(BoudBox.SelectedItem);
-            //var select  =  BoudBox.SelectedIndex;
             BoudBox.TabIndex = BoudBox.SelectedIndex;//select
         }
         private void selectorDataBox(object sender, SelectionChangedEventArgs e)
@@ -236,11 +247,7 @@ namespace comPort_wpf
         }
         private void Click_selectPortNameBtn(object sender, RoutedEventArgs e)
         {
-            // var tmp = listViewCom.SelectedItem.ToString();
-
-            PortBox.Text = Convert.ToString(ListViewCom_.SelectedItems);
-            PortBox.TabIndex = ListViewCom_.SelectedIndex;
-            //SearchPorts.Name = listViewCom.Select()
+            PortBox.TabIndex = ListViewCom_.SelectedIndex;   
         }
 
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
@@ -250,47 +257,53 @@ namespace comPort_wpf
 
         private void listview_item_selected(object sender, SelectionChangedEventArgs e)
         {
-            //if(ListViewCom_.SelectedItem != null) { ListViewCom_.Remove(ListViewCom_.) }
-            // var tmp = ListViewCom_.SelectedIndex.ToString();
-            ListViewCom_.SelectedIndex = comSelectedValue = Int32.Parse(ListViewCom_.SelectedIndex.ToString());
-            // MessageBox.Show(tmp);
-            //var listtt = GetSelectedItem(listViewCom);
+            if(ListViewCom_.SelectedItem != null) { 
+                search_Com = (ComSearch_)ListViewCom_.SelectedItem;
+                PortBox.Text = search_Com.PorT; 
+            }
+            //ListViewCom_.SelectedIndex = comSelectedValue = Int32.Parse(ListViewCom_.SelectedIndex.ToString());
         }
-
-
-
-        //public static string GetSelectedItem(ListView list)
-        //{
-        //    foreach (ListViewItem item in list.Items)
-        //    {
-        //        if (item.IsSelected)
-        //            return item.Name;
-        //    }
-        //    return null;
-        //}
 
         private void ports_window_open_close(object sender, RoutedEventArgs e)
         {
-            if (!ports_window_open_close_bool)
+            if (settings.ComSearchWindow)
             {
-                btnPorts.Content = "Порты>>";
-                ports_window_open_close_bool = true;
-                CanvasVisiblity.Visibility = Visibility.Hidden;
-                window_settings_comPort_tools.Width = 195;
-                window_settings_comPort_tools.MinWidth = 195;
-                window_settings_comPort_tools.MaxWidth = 195;
+                settings.ComSearchWindow = false;
+                settings.Save();
             }
-            else
+            else {
+                settings.ComSearchWindow = true;
+                settings.Save();
+            }
+            ports_window_open_cloce_func();
+        }
+        void ports_window_open_cloce_func()
+        {
+            if (settings.ComSearchWindow)
             {
                 btnPorts.Content = "Порты<<";
-                ports_window_open_close_bool = false;
                 CanvasVisiblity.Visibility = Visibility.Visible;
                 window_settings_comPort_tools.Width = 380;
                 window_settings_comPort_tools.MinWidth = 380;
                 window_settings_comPort_tools.MaxWidth = 380;
+                settings.Save();
+            } 
+            else
+            {
+                btnPorts.Content = "Порты>>";
+                CanvasVisiblity.Visibility = Visibility.Hidden;
+                window_settings_comPort_tools.Width = 195;
+                window_settings_comPort_tools.MinWidth = 195;
+                window_settings_comPort_tools.MaxWidth = 195;
+                settings.Save();
             }
+            
         }
+
     }
+
+
+    
 }
 
 

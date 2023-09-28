@@ -17,9 +17,7 @@
     Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }" 
     Left ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }" 
     PreviewDragEnter="probn" SizeChanged="probn"-->
-    <!--<av:Window.DataContext>
-     <p:Settings1/>
- </av:Window.DataContext>-->
+
     <Window.Resources>
         <!--TargetType="{x:Type TextBlock}" TargetType="{x:Type TextBox}"-->
         <SolidColorBrush x:Key="ColorBackground" Color="#FFB1ACAC" />
@@ -308,12 +306,12 @@
                     <MenuItem Header="Выход из программы"                   Click="Exit_programm"/>
                 </MenuItem>
                 <MenuItem Header="  Вид   "                                 Style="{DynamicResource MenuItem_Up_toolBar}"  InputGestureText="true" >
-                    <MenuItem Header="Сигналы"                              IsCheckable="True"  Click="Button_Click_Signals" x:Name="checkSignals"  IsChecked="True"/>
-                    <MenuItem Header="Контроль времени"                     IsCheckable="True"  Click="Button_Click"         x:Name="checkClock"    IsChecked="True" />
-                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_hidden"  x:Name="checkSettings" IsChecked="True"/>
+                    <MenuItem Header="Сигналы"                              IsCheckable="True"  Click="Button_Click_Signals"        x:Name="checkSignals"  IsChecked="True"/>
+                    <MenuItem Header="Контроль времени"                     IsCheckable="True"  Click="Button_Click_Clock_Visible"  x:Name="checkClock"    IsChecked="True" />
+                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_ToolBar"       x:Name="checkToolBar"  IsChecked="True"/>
                     <Separator/>
-                    <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"  Click="Button_Tx_Data"       x:Name="Tx_Data"       IsChecked="True"/>
-					<MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"       x:Name="Rx_Data"       IsChecked="True"/>
+                    <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"  Click="Button_Tx_Data"              x:Name="Tx_Data"       IsChecked="True"/>
+					<MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"              x:Name="Rx_Data"       IsChecked="True"/>
                     <Separator/>
                     <MenuItem Header="Журнал"/>
                 </MenuItem>
@@ -328,12 +326,12 @@
             <TextBlock Text="ComPort"     MouseLeftButtonDown="Message_ComPort"     Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="com_portt"/>
             <TextBlock Text="О Программе" MouseLeftButtonDown="Message_O_Programme" Style="{DynamicResource Menu_TextBlock_Up_toolBar}" x:Name="o_progr"/>-->
         </StackPanel>
-        <StatusBar Grid.Column="3" Grid.Row="0"  Background="#FFCCCBCB" HorizontalAlignment="Right"   x:Name="StBClock" >
+        <StatusBar Grid.Column="3" Grid.Row="0"  Background="#FFCCCBCB" HorizontalAlignment="Right"   x:Name="SatusBarClock" >
             <Separator/>
             <TextBlock x:Name="tBlockClock" Foreground="#FF1DEB14"  Background="Black" FontWeight="Bold" FontSize="16" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Width="65" Grid.IsSharedSizeScope="True" />
             <Separator/>
         </StatusBar>
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" Background="#FFB4B4B4"  x:Name="StecPanel_Settings">
+        <StackPanel Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" Background="#FFB4B4B4"  x:Name="StecPanel_ToolBar">
             <ToggleButton x:Name="btnConect"    ToolTip="Открыть порт" Margin="3,0,2,0" Content="Connect"    Checked="btnConect_Checked"    Style="{DynamicResource TuggleBtnConnect}" />
             <ToggleButton x:Name="btnDisConect" ToolTip="Закрыть порт" Margin="2,0,2,0" Content="Disconnect" Checked="btnDisConect_Checked" Style="{DynamicResource TuggleBtnDisconnect}"/>
 
