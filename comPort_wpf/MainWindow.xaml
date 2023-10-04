@@ -235,7 +235,7 @@
 
 
         </ContextMenu>
-        <ContextMenu x:Key="mBoudrate" >
+        <!--<ContextMenu x:Key="mBoudrate" >
             <MenuItem Header="110"    IsCheckable="True" />
             <MenuItem Header="300"    IsCheckable="True"/>
             <MenuItem Header="600"    IsCheckable="True"/>
@@ -251,7 +251,7 @@
             <MenuItem Header="115200" IsCheckable="True"/>
             <MenuItem Header="128000" IsCheckable="True"/>
             <MenuItem Header="256000" IsCheckable="True"/>
-        </ContextMenu>
+        </ContextMenu>-->
 
         <ContextMenu x:Key="mDataBit" >
             <MenuItem Header="5"      IsCheckable="True" />
@@ -416,11 +416,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
             <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
-                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
-                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity"  />
-                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit" />
-                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, ElementName=MainWindow, FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
+                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=portName}"   MouseLeftButtonDown="Box_Click_Port"    />
+                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=baudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
+                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=dataBits}"   MouseLeftButtonDown="Box_Click_DataBit"  />
+                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=parityBits}" MouseLeftButtonDown="Box_Click_Parity" />
+                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=stopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
                 <StackPanel/>
             </DockPanel>
         </Grid>

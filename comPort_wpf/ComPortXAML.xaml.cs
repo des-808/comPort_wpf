@@ -12,7 +12,6 @@ namespace comPort_wpf
 {
     public partial class ComPortXAML : Window
     {
-        //private bool ports_window_open_close_bool = true;
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
@@ -33,31 +32,18 @@ namespace comPort_wpf
             ports_window_open_cloce_func();
             ports = SerialPort.GetPortNames();
             listViewCom = new ObservableCollection<ComSearch_>(); ListViewCom_.ItemsSource = listViewCom;
-            //PortBox  .Items.Clear();
-            //BoudBox  .Items.Clear();
-            //DataBox  .Items.Clear();
-            //ParityBox.Items.Clear();
-            //StopBox  .Items.Clear();
+
             foreach (string b in ports) { PortBox.Items.Add(b); }
             foreach (string b in arrBoudRate) { BoudBox.Items.Add(b); }
             foreach (string b in arrBit) { DataBox.Items.Add(b); }
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
-            PortBox.Text = ConfigurationManager.AppSettings["Port"].ToString();
-            //PortBox.SelectedIndex = comSelectedValue;
-
-            //PortBox.Text = ComInitStruct.pName.ToString();
-            //BoudBox.Text = ComInitStruct.baudRat.ToString();
-            //DataBox.Text = Convert.ToInt32(ComInitStruct.dBit).ToString();
-            //ParityBox.Text = (Convert.ToInt32(ComInitStruct.parity).ToString());
-            //StopBox.Text = Convert.ToDouble(ComInitStruct.sBit).ToString();
 
             PortBox.Text = ConfigurationManager.AppSettings["Port"];
             BoudBox.Text = (ConfigurationManager.AppSettings["BoudRate"]);
-            ParityBox.Text = (ConfigurationManager.AppSettings["Parity"]);
             DataBox.Text = (ConfigurationManager.AppSettings["Data"]);
+            ParityBox.Text = ParityToString(Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]));
             StopBox.Text = (ConfigurationManager.AppSettings["Stop"]);
-
 
             MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
 
@@ -80,52 +66,43 @@ namespace comPort_wpf
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
             settingsSaveTopLeft();
-            //ComInitStruct.pName =   (string)PortBox.SelectedValue;
-            //ComInitStruct.baudRat = Convert.ToInt32(BoudBox.SelectedValue);
-            //ComInitStruct.parity =  (Parity)StringToParity((string)ParityBox.SelectedValue);
-            //ComInitStruct.dBit =    Convert.ToInt32(DataBox.SelectedValue);
-            //ComInitStruct.sBit =    (StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
 
-
-            ConfigurationManager.AppSettings["Port"] = (string)PortBox.SelectedValue;
-            ConfigurationManager.AppSettings["BoudRate"] = BoudBox.SelectedValue.ToString();
-            ConfigurationManager.AppSettings["Parity"] = ParityBox.SelectedValue.ToString();
-            ConfigurationManager.AppSettings["Data"] = DataBox.SelectedValue.ToString();
-            ConfigurationManager.AppSettings["Stop"] = StopBox.SelectedValue.ToString();
-
-            //MessageBox.Show(Convert.ToString(Convert.ToDouble((string)StopBox.SelectedValue)));
-            MyPort = new(
-                          ConfigurationManager.AppSettings["Port"],
-                          Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
-                          (Parity)StringToParity(ConfigurationManager.AppSettings["Parity"]),
-                          Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
-                          (StopBits)Convert.ToDouble(ConfigurationManager.AppSettings["Stop"]));
+            ComInitStruct.AddUpdateAppSettings("Port", (string)PortBox.SelectedValue);
+            ComInitStruct.AddUpdateAppSettings("BoudRate", BoudBox.SelectedValue.ToString());
+            ComInitStruct.AddUpdateAppSettings("Parity", StringToParity(ParityBox.SelectedValue.ToString()).ToString());
+            ComInitStruct.AddUpdateAppSettings("Data", DataBox.SelectedValue.ToString());
+            ComInitStruct.AddUpdateAppSettings("Stop", StopBox.SelectedValue.ToString());
+         
+            MyPort = new(ComInitStruct.ReadSetting("Port"),
+                          Convert.ToInt32(ComInitStruct.ReadSetting("BoudRate")),
+                          (Parity)StringToParity(ComInitStruct.ReadSetting("Parity")),
+                          Convert.ToInt32(ComInitStruct.ReadSetting("Data")),
+                          (StopBits)StringToStop(ComInitStruct.ReadSetting("Stop")));
             //MyPort = new(comInitStruct.pName, comInitStruct.baudRat, (Parity)comInitStruct.parity, comInitStruct.dBit, (StopBits)comInitStruct.sBit);
             //SaveSettingsCom();
             Close();
         }
-        //private void SaveSettingsCom()
-        //{//public static ComStruct comInitStruct = new ComStruct(ConfigurationManager.AppSettings["Port"], 
-        // //                                      Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
-        // //                              (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]),
-        // //                                      Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
-        // //                            (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]));
-
-        //    //settings.Port       = comInitStruct.pName;
-        //    //settings.BoudRate   = comInitStruct.baudRat;
-        //    //settings.Parity     = Convert.ToString(comInitStruct.parity);
-        //    //settings.Data       = comInitStruct.dBit;
-        //    //settings.Stop       = Convert.ToString(comInitStruct.sBit);
-        //    //settings.Save();
-        //}
-        //private void LoadSettings()
-        //{
-        //    //comInitStruct.pName   = //(string)PortBox.SelectedValue;
-        //    //comInitStruct.baudRat = //Convert.ToInt32(BoudBox.SelectedValue);
-        //    //comInitStruct.parity  = //(Parity)StringToParity((string)ParityBox.SelectedValue);
-        //    //comInitStruct.dBit    = //Convert.ToInt32(DataBox.SelectedValue);
-        //    //comInitStruct.sBit    = //(StopBits)Convert.ToDouble((string)StopBox.SelectedValue);
-        //}
+      private double StringToStop(string str) {
+            int i = 0;
+            double d = 1;
+            if (str != null)
+            {
+                for(;i<arrStop.Length;i++)
+                {
+                    if (Equals(arrStop[i], str))
+                    {
+                        switch(i)
+                        {
+                            case 0: d = 1;   break;
+                            case 1: d = 1.5; break;
+                            case 2: d = 2;   break;
+                        }
+                        return d;
+                    }
+                }
+            }
+            return d; 
+        }
         private int StringToParity(string str)
         {
             //string[] arrStr = new[]{ "q"};
@@ -134,10 +111,16 @@ namespace comPort_wpf
             {
                 for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrParitet[i], str)) { return i; };
+                    if (Equals(arrParitet[i], str)) { 
+                        return i; };
                 }
             }
             return i = 0;
+        }
+        private string ParityToString(int p)
+        {
+            if (p <= arrParitet.Length){return arrParitet[p];}
+            return  "";
         }
         private void BtnCancel(object sender, RoutedEventArgs e)
         {

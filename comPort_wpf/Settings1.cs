@@ -1,4 +1,6 @@
-﻿namespace comPort_wpf
+﻿using System.Windows;
+
+namespace comPort_wpf
 {
     // Этот класс позволяет обрабатывать определенные события в классе параметров:
     //  Событие SettingChanging возникает перед изменением значения параметра.
@@ -20,6 +22,7 @@
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e)
         {
             // Добавьте здесь код для обработки события SettingChangingEvent.
+           // MessageBox.Show($"SettingChangingEventHandler: ");
         }
 
         private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e)
