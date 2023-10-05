@@ -10,14 +10,17 @@ using static comPort_wpf.MainWindow;
 
 namespace comPort_wpf
 {
+        
     public partial class ComPortXAML : Window
     {
+        
+        dMessge messsage;
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
         ComSearch_ search_Com;
         string stroka = "";
-        public static SerialPort? MyPort;// = new("COM0", 115200,Parity.None,8, StopBits.One);
+        public static SerialPort? MyPort = new("COM0", 115200,Parity.None,8, StopBits.One);
         Thread writeThread = new Thread(Write);
         static bool _continue = true;
         // Объявляем событие Sobitie на основе делегата
@@ -39,16 +42,29 @@ namespace comPort_wpf
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
 
-            PortBox.Text = ConfigurationManager.AppSettings["Port"];
-            BoudBox.Text = (ConfigurationManager.AppSettings["BoudRate"]);
-            DataBox.Text = (ConfigurationManager.AppSettings["Data"]);
-            ParityBox.Text = ParityToString(Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]));
-            StopBox.Text = (ConfigurationManager.AppSettings["Stop"]);
-
-            MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
-
+            PortBox.Text = ComStruct.ReadSetting("Port");
+            BoudBox.Text = ComStruct.ReadSetting("BoudRate");
+            DataBox.Text = ComStruct.ReadSetting("Data");
+            ParityBox.Text = perevodchikParitet (ComStruct.ReadSetting("Parity"));
+            StopBox.Text = perevodchikStop(ComStruct.ReadSetting("Stop"));
+            //MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
+        }
+        public string perevodchikParitet(string str)
+        {
+            for (int i = 0; i < arrParitetEng.Length; i++) {
+                if (Equals(arrParitetEng[i], str)) str = arrParitet[i]; 
+            }
+            return str;
         }
 
+        public string perevodchikStop(string str)
+        {
+            for (int i = 0; i < arrStopEng.Length; i++)
+            {
+                if (Equals(arrStopEng[i], str)) str = arrStop[i];
+            }
+            return str;
+        }
 
         //Cоздаем метод для события, который просто будет обращаться к событию
         public void MetoddlyaSobitiya()
@@ -66,30 +82,21 @@ namespace comPort_wpf
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
             settingsSaveTopLeft();
-
-            ComInitStruct.AddUpdateAppSettings("Port", (string)PortBox.SelectedValue);
-            ComInitStruct.AddUpdateAppSettings("BoudRate", BoudBox.SelectedValue.ToString());
-            ComInitStruct.AddUpdateAppSettings("Parity", StringToParity(ParityBox.SelectedValue.ToString()).ToString());
-            ComInitStruct.AddUpdateAppSettings("Data", DataBox.SelectedValue.ToString());
-            ComInitStruct.AddUpdateAppSettings("Stop", StopBox.SelectedValue.ToString());
-         
-            MyPort = new(ComInitStruct.ReadSetting("Port"),
-                          Convert.ToInt32(ComInitStruct.ReadSetting("BoudRate")),
-                          (Parity)StringToParity(ComInitStruct.ReadSetting("Parity")),
-                          Convert.ToInt32(ComInitStruct.ReadSetting("Data")),
-                          (StopBits)StringToStop(ComInitStruct.ReadSetting("Stop")));
-            //MyPort = new(comInitStruct.pName, comInitStruct.baudRat, (Parity)comInitStruct.parity, comInitStruct.dBit, (StopBits)comInitStruct.sBit);
-            //SaveSettingsCom();
+            ComStruct.AddUpdateAppSettings("Port", PortBox.Text);
+            ComStruct.AddUpdateAppSettings("BoudRate", BoudBox.Text.ToString());
+            ComStruct.AddUpdateAppSettings("Parity", ParityBox.Text.ToString());
+            ComStruct.AddUpdateAppSettings("Data", DataBox.Text.ToString());
+            ComStruct.AddUpdateAppSettings("Stop", StopBox.Text.ToString());
             Close();
         }
-      private double StringToStop(string str) {
+        private double StringToStop(string str) {
             int i = 0;
             double d = 1;
             if (str != null)
             {
                 for(;i<arrStop.Length;i++)
                 {
-                    if (Equals(arrStop[i], str))
+                    if ((Equals(arrStop[i], str)) && (Equals(arrStopEng[i],str)))
                     {
                         switch(i)
                         {
@@ -99,6 +106,7 @@ namespace comPort_wpf
                         }
                         return d;
                     }
+
                 }
             }
             return d; 
@@ -111,8 +119,8 @@ namespace comPort_wpf
             {
                 for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrParitet[i], str)) { 
-                        return i; };
+                    if (Equals(arrParitet[i], str)) { return i; };
+                    if (Equals(arrParitetEng[i], str)) { return i; };
                 }
             }
             return i = 0;
@@ -120,7 +128,8 @@ namespace comPort_wpf
         private string ParityToString(int p)
         {
             if (p <= arrParitet.Length){return arrParitet[p];}
-            return  "";
+            if (p <= arrParitetEng.Length){return arrParitet[p];}
+            return  "0";
         }
         private void BtnCancel(object sender, RoutedEventArgs e)
         {
@@ -236,8 +245,14 @@ namespace comPort_wpf
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
         private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
+        private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
         private string[] arrStop = new[] { "1", "1.5", "2" };
+        private string[] arrStopEng = new[] { "One", "Two", "OnePointFive" };
 
+        //    None = 0,
+        //    One = 1,
+        //    Two = 2,
+        //    OnePointFive = 3,
         private void listview_item_selected(object sender, SelectionChangedEventArgs e)
         {
             if(ListViewCom_.SelectedItem != null) { 
@@ -249,15 +264,7 @@ namespace comPort_wpf
 
         private void ports_window_open_close(object sender, RoutedEventArgs e)
         {
-            if (settings.ComSearchWindow)
-            {
-                settings.ComSearchWindow = false;
-                settings.Save();
-            }
-            else {
-                settings.ComSearchWindow = true;
-                settings.Save();
-            }
+           settings.ComSearchWindow = settings.ComSearchWindow ? false : true; settings.Save();
             ports_window_open_cloce_func();
         }
         void ports_window_open_cloce_func()

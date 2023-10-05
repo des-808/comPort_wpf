@@ -17,12 +17,13 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace comPort_wpf
 {
+    delegate void dMessge();
     public partial class MainWindow : Window
     {
         //public delegate void Mydelegate();
         private static Settings1 settings = new();
         private string[] ports = new[] { "" };
-        private static ComStruct comInitStruct = new();
+        public static ComStruct comInitStruct = new();
         public static SerialPort MyPort = new();
         public ContextMenu? mPortContextMenu = new ContextMenu();
         private delegate void UpTDelegate(string text);
@@ -120,27 +121,15 @@ namespace comPort_wpf
         //        }
         //    }
         //}
-        private void appSettingsSet(string str, double X)
-        {
-            //int Y = Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
-            ConfigurationManager.AppSettings[str] = X.ToString();
-        }
-        private string appSettingsGet(string str)
-        {
-            string? result;
-            result = ConfigurationManager.AppSettings[str];
-            if (result == null) result = "";
-            return result;
-            //return Convert.ToInt32(ConfigurationManager.AppSettings["Y"]);
-        }
+
         private void settingsSaveTopLeftHeightWidth()
         {
             settings.HeightMainWindow = mainWindow.Height;
             settings.WidthMainWindow = mainWindow.Width;
             settings.TopMainWindow = mainWindow.Top;
             settings.LeftMainWindow = mainWindow.Left;
-            appSettingsSet("X", mainWindow.Top);
-            appSettingsSet("Y", mainWindow.Left);
+            //appSettingsSet("X", mainWindow.Top);
+            //appSettingsSet("Y", mainWindow.Left);
             settings.Save();
             //X = Convert.ToInt32(appSettingsGet("X"));
             //Y = Convert.ToInt32(appSettingsGet("Y"));
@@ -164,27 +153,13 @@ namespace comPort_wpf
             timer.Start();
         }
         private static void SearchPorts(out string[] ports) => ports = SerialPort.GetPortNames();
-        private void ComPortInit()
+        public void ComPortInit()
         {
-            //MyPort.PortName = ComInitStruct.pName;//  "COM7";
-            //MyPort.BaudRate = ComInitStruct.baudRat;//  115200;
-            //MyPort.Parity =   ComInitStruct.parity;// Parity.None ;//Parity.None
-            //MyPort.DataBits = ComInitStruct.dBit;//  8;
-            //MyPort.StopBits = ComInitStruct.sBit;//  StopBits.One;
-
-            //MyPort = new(
-            //              ConfigurationManager.AppSettings["Port"],
-            //              Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]),
-            //              (Parity)StringToParity(ConfigurationManager.AppSettings["Parity"]),
-            //              Convert.ToInt32(ConfigurationManager.AppSettings["Data"]),
-            //              (StopBits)Convert.ToDouble(ConfigurationManager.AppSettings["Stop"]));
-
-
-            MyPort.PortName = comInitStruct.ReadSetting( "Port");//  "COM7";
-            MyPort.BaudRate = Convert.ToInt32(comInitStruct.ReadSetting("BoudRate"));//  115200;
-            MyPort.Parity = (Parity)Convert.ToInt32(StringToParity(comInitStruct.ReadSetting("Parity")));// Parity.None ;//Parity.None
-            MyPort.DataBits = Convert.ToInt32(comInitStruct.ReadSetting("Data"));//  8;
-            MyPort.StopBits = (StopBits)Convert.ToDouble(comInitStruct.ReadSetting("Stop"));//  StopBits.One;
+            MyPort.PortName = ComStruct.ReadSetting("Port");//  "COM7";
+            MyPort.BaudRate = Convert.ToInt32(ComStruct.ReadSetting("BoudRate"));//  115200;
+            MyPort.Parity =   (Parity)Convert.ToInt32(StringToParity(ComStruct.ReadSetting("Parity")));// Parity.None ;//Parity.None
+            MyPort.DataBits = Convert.ToInt32(ComStruct.ReadSetting("Data"));//  8;
+            MyPort.StopBits = (StopBits)StringToStop(ComStruct.ReadSetting("Stop"));//  StopBits.One;
         }
         private void ToolBarComInit()
         {
@@ -193,11 +168,17 @@ namespace comPort_wpf
             box3.IsEnabled = true;
             box4.IsEnabled = true;
             box5.IsEnabled = true;
-            box1.Text = "порт: " + ComInitStruct.pName;//  "COM7";
-            box2.Text = "скор.: " + ComInitStruct.baudRat.ToString();//  115200;
-            box3.Text = "бит: " + ComInitStruct.dBit.ToString();//  8;
-            box4.Text = "паритет: " + ComInitStruct.parity.ToString();// Parity.None ;//Parity.None
-            box5.Text = "стоп бит: " + ComInitStruct.sBit.ToString();//  StopBits.One;
+            box1.Text = "порт: " + MyPort.PortName ;//  "COM7";
+            box2.Text = "скор.: " + MyPort.BaudRate.ToString();//  115200;
+            box3.Text = "бит: " + MyPort.DataBits .ToString();//  8;
+            box4.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
+            box5.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
+
+            //box1.Text = "порт: " + ComInitStruct.pName;//  "COM7";
+            //box2.Text = "скор.: " + ComInitStruct.baudRat.ToString();//  115200;
+            //box3.Text = "бит: " + ComInitStruct.dBit.ToString();//  8;
+            //box4.Text = "паритет: " + ComInitStruct.parity.ToString();// Parity.None ;//Parity.None
+            //box5.Text = "стоп бит: " + ComInitStruct.sBit.ToString();//  StopBits.One;
         }
         private void ToolBarComDeInit()
         {
@@ -214,9 +195,12 @@ namespace comPort_wpf
         }
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
-
             MyPort.Close();
-            comInitStruct.Save();
+            ComStruct.AddUpdateAppSettings("Port",MyPort.PortName);
+            ComStruct.AddUpdateAppSettings("BoudRate",MyPort.BaudRate.ToString());
+            ComStruct.AddUpdateAppSettings("Parity", MyPort.Parity.ToString());
+            ComStruct.AddUpdateAppSettings("Data", MyPort.DataBits.ToString());
+            ComStruct.AddUpdateAppSettings("Stop", MyPort.StopBits.ToString());
             this.Close(); // закрытие окна
         }
         private void Clear_rx(object sender, RoutedEventArgs e) { term.SetCountRx(0); terminalRx.Clear(); }
@@ -233,6 +217,7 @@ namespace comPort_wpf
         }
         private bool Open_port()
         {
+           // ComPortInit();
             int i = 0;
             bool _port = true;
             if (MyPort.IsOpen) { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler; }
@@ -305,12 +290,6 @@ namespace comPort_wpf
             btnConect.IsChecked = false;
             Close_port();
         }
-
-        //private void Exit_programm(object sender, MouseButtonEventArgs e) {
-        //    settingsSaveTopLeftHeightWidth();
-        //    try { Close_port(); }
-        //    catch { System.Windows.MessageBox.Show("error close port"); }
-        //}
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settingsSaveTopLeftHeightWidth();
@@ -498,7 +477,6 @@ namespace comPort_wpf
             finally { Console.WriteLine("Executing finally block."); }
         }
         private void O_Programme_Click(object sender, RoutedEventArgs e) => MessageBox.Show("   Не до реплика ComPort ToolKit");
-
         public int StringToParity(string str)
         {
             //string[] arrStr = new[]{ "q"};
@@ -508,14 +486,44 @@ namespace comPort_wpf
                 for (; i < arrParitet.Length; i++)
                 {
                     if (Equals(arrParitet[i], str)) { return i; };
+                    if (Equals(arrParitetEng[i], str)) { return i; };
                 }
             }
             return i = 0;
         }
+        private string ParityToString(int p)
+        {
+            if (p <= arrParitet.Length) { return arrParitet[p]; }
+            return "";
+        }
+        private double StringToStop(string str)
+        {
+            int i = 0;
+            double d = 1;
+            if (str != null)
+            {
+                for (; i < arrStop.Length; i++)
+                {
+                    if (Equals(arrStop[i], str) && (Equals(arrStopEng[i], str)))
+                    {
+                        switch (i)
+                        {
+                            case 0: d = 1; break;
+                            case 1: d = 1.5; break;
+                            case 2: d = 2; break;
+                        }
+                        return d;
+                    }
+                }
+            }
+            return d;
+        }
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
         private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
+        private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
         private string[] arrStop = new[] { "1", "1.5", "2" };
+        private string[] arrStopEng = new[] { "One", "Two", "OnePointFive" };
 
     }
     
@@ -562,70 +570,42 @@ namespace comPort_wpf
     {
         private static string? portName;//COM1
         private static int baudRate;//   = 115200;       //115200
-        private static Parity parityBits;//  = Parity.None;  //None
+        private static int parityBits;//  = Parity.None;  //None
         private static int dataBits;//    = 8;            //5,6,7,8 
         private static StopBits stopBits;//   = StopBits.One; //One
 
-        //public ComStruct(string str = "COM0", int bod = 115200, Parity x = Parity.None, int dBit = 8, StopBits y = StopBits.One)
-        //{
-        //    portName = str;//"COM7";
-        //    baudRate = bod;//115200;
-        //    parityBits = x;//Parity.None;
-        //    dataBits = dBit;//8;
-        //    stopBits = y;//StopBits.One;
-        //}
-
-        static ComStruct()
+         static ComStruct()
         {
+            //portName = ComStruct.ReadSetting("Port");
+            //baudRate = Convert.ToInt32(ReadSetting("BoudRate"));
+            //dataBits = Convert.ToInt32(ReadSetting("Data"));
+            //parityBits = Convert.ToInt32(ReadSetting("Parity"));
+            //stopBits = (StopBits)Convert.ToDouble(ReadSetting("Stop"));
 
-            //ConfigurationManager.AppSettings["Port"] = "COM3";
-            //ConfigurationManager.AppSettings["BoudRate"] = "115233";
-            portName = ConfigurationManager.AppSettings["Port"];
-            baudRate = Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]);
-            parityBits = (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]);
-            dataBits = Convert.ToInt32(ConfigurationManager.AppSettings["Data"]);
-            stopBits = (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]);
-
-            //pName = ConfigurationManager.AppSettings["Port"];
-            //baudRat = Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]);
-            //parity = (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]);
-            //dBit = Convert.ToInt32(ConfigurationManager.AppSettings["Data"]);
-            //sBit = (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]);
-
-            //comInitStruct.pName = ConfigurationManager.AppSettings["Port"];
-            //comInitStruct.baudRat = Convert.ToInt32(ConfigurationManager.AppSettings["BoudRate"]);
-            //comInitStruct.parity = (Parity)Convert.ToInt32(ConfigurationManager.AppSettings["Parity"]);
-            //comInitStruct.dBit = Convert.ToInt32(ConfigurationManager.AppSettings["Data"]);
-            //comInitStruct.sBit = (StopBits)Convert.ToInt32(ConfigurationManager.AppSettings["Stop"]);
+            portName = Zaglushka.ReadSetting("Port");
+            baudRate = Convert.ToInt32(Zaglushka.baudRate);
+            parityBits = Convert.ToInt32(Zaglushka.parityBits);
+            dataBits = Convert.ToInt32(Zaglushka.dataBits);
+            stopBits = (StopBits)Convert.ToDouble(Zaglushka.stopBits);
 
         }
         public string pName { get { return portName; } set { portName = value; } }
         public int baudRat { get { return baudRate; } set { baudRate = value; } }
-        public Parity parity { get { return parityBits; } set { parityBits = value; } }
+        public Parity parity { get { return (Parity)parityBits; } set { parityBits = Convert.ToInt32(value); } }
         public int dBit { get { return dataBits; } set { dataBits = value; } }
         public StopBits sBit { get { return stopBits; } set { stopBits = value; } }
 
         public void print()
         {
             MessageBox.Show(portName + "\r\n" + baudRate + "\r\n" + parityBits + "\r\n" + dataBits + "\r\n" + stopBits);
-        } 
+        }
         public void print_AppSettings()
         {
             //MessageBox.Show($"{ReadSetting("Port")} + "\r\n" + {ReadSetting("BoudRate")} + "\r\n" + {ReadSetting("Parity")} + "\r\n" + {ReadSetting("Data")} + "\r\n" + {ReadSetting("Stop")}");
             MessageBox.Show($" Port:          {ReadSetting("Port")} \r\n BoudRAte: {ReadSetting("BoudRate")} \r\n Parity:        {ReadSetting("Parity")} \r\n DataBits:    {ReadSetting("Data")} \r\n StopBits:    {ReadSetting("Stop")}");
         }
 
-        public void Save()
-        {
-            AddUpdateAppSettings("Port", portName);
-            AddUpdateAppSettings("BoudRate", baudRate.ToString());
-            AddUpdateAppSettings("Parity", parityBits.ToString());
-            AddUpdateAppSettings("Data", dataBits.ToString());
-            AddUpdateAppSettings("Stop", stopBits.ToString());
-            
-        }
-
-       public void AddUpdateAppSettings(string key, string value)
+        public static void AddUpdateAppSettings(string key, string value)
         {
             try
             {
@@ -647,7 +627,7 @@ namespace comPort_wpf
                 Console.WriteLine("Error writing app settings");
             }
         }
-       public string ReadSetting(string key)
+        public static string ReadSetting(string key)
         {
             try
             {
@@ -701,6 +681,62 @@ namespace comPort_wpf
 
         //public bool isChecked { get; set; } = false;
         public override string ToString() => $"{Name}";
+    }
+    public static class Zaglushka {
+        public static string? portName { get;  set; }
+        public static string? baudRate { get;  set; }
+        public static string? parityBits { get;  set; }
+        public static string? dataBits { get;  set; }
+        public static StopBits stopBits { get;  set; }
+
+       
+        public static void Save()
+        {
+            AddUpdateAppSettings("Port", portName);
+            AddUpdateAppSettings("BoudRate", baudRate.ToString());
+            AddUpdateAppSettings("Parity", parityBits.ToString());
+            AddUpdateAppSettings("Data", dataBits.ToString());
+            AddUpdateAppSettings("Stop", stopBits.ToString());
+        }
+
+        public static void AddUpdateAppSettings(string key, string value)
+        {
+            try
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+                if (settings[key] == null)
+                {
+                    settings.Add(key, value);
+                }
+                else
+                {
+                    settings[key].Value = value;
+                }
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            }
+            catch (ConfigurationErrorsException)
+            {
+                Console.WriteLine("Error writing app settings");
+            }
+        }
+        public static string ReadSetting(string key)
+        {
+            try
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+                string result = appSettings[key] ?? "Not Found";
+                //Console.WriteLine(result);
+                return result;
+            }
+            catch (ConfigurationErrorsException)
+            {
+                //Console.WriteLine("Error reading app settings");
+                MessageBox.Show("Error reading app settings");
+            }
+            return "";
+        }
     }
     //class MainVM 
     //{
