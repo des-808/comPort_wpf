@@ -89,47 +89,35 @@ namespace comPort_wpf
             ComStruct.AddUpdateAppSettings("Stop", StopBox.Text.ToString());
             Close();
         }
-        private double StringToStop(string str) {
-            int i = 0;
-            double d = 1;
-            if (str != null)
-            {
-                for(;i<arrStop.Length;i++)
-                {
-                    if ((Equals(arrStop[i], str)) && (Equals(arrStopEng[i],str)))
-                    {
-                        switch(i)
-                        {
-                            case 0: d = 1;   break;
-                            case 1: d = 1.5; break;
-                            case 2: d = 2;   break;
-                        }
-                        return d;
-                    }
-
-                }
-            }
-            return d; 
-        }
-        private int StringToParity(string str)
+        public int StringToParity(string str)
         {
-            //string[] arrStr = new[]{ "q"};
             int i = 0;
             if (str != null)
             {
                 for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrParitet[i], str)) { return i; };
-                    if (Equals(arrParitetEng[i], str)) { return i; };
+                    if (Equals(arrParitet[i], str) || (Equals(arrParitetEng[i], str))) return i;
                 }
             }
             return i = 0;
         }
         private string ParityToString(int p)
         {
-            if (p <= arrParitet.Length){return arrParitet[p];}
-            if (p <= arrParitetEng.Length){return arrParitet[p];}
-            return  "0";
+            if (p <= arrParitet.Length) { return arrParitet[p]; }
+            return "";
+        }
+        private int StringToStop(string str)
+        {
+            int i = 0;
+            double d = 1;
+            if (str != null)
+            {
+                for (; i < arrStop.Length; i++)
+                {
+                    if (Equals(arrStop[i], str) || Equals(arrStopEng[i], str)) return i += 1;
+                }
+            }
+            return i;
         }
         private void BtnCancel(object sender, RoutedEventArgs e)
         {
@@ -246,7 +234,7 @@ namespace comPort_wpf
         private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
         private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
-        private string[] arrStop = new[] { "1", "1.5", "2" };
+        private string[] arrStop = new[] { "1", "2", "1.5" };
         private string[] arrStopEng = new[] { "One", "Two", "OnePointFive" };
 
         //    None = 0,

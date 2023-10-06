@@ -201,6 +201,58 @@
             <MenuItem Header="Menu item 3" IsCheckable="True" Checked="menu3"/>
         </ContextMenu>-->
 
+        <ContextMenu x:Key="mComPort"  >
+            <MenuItem Header="COM1"     IsCheckable="True" />
+            <MenuItem Header="COM2"     IsCheckable="True" />
+            <MenuItem Header="COM3"     IsCheckable="True" />
+            <MenuItem Header="COM4"     IsCheckable="True" />
+            <MenuItem Header="COM5"     IsCheckable="True" />
+            <MenuItem Header="COM6"     IsCheckable="True" />
+            <MenuItem Header="COM7"     IsCheckable="True" />
+            <MenuItem Header="COM8"     IsCheckable="True" />
+            <MenuItem Header="COM9"     IsCheckable="True" />
+            <MenuItem Header="COM10"    IsCheckable="True" />
+            <MenuItem Header="COM11"    IsCheckable="True" />
+            <MenuItem Header="COM12"    IsCheckable="True" />
+            <MenuItem Header="COM13"    IsCheckable="True" />
+            <MenuItem Header="COM14"    IsCheckable="True" />
+            <MenuItem Header="COM15"    IsCheckable="True" />
+            <MenuItem Header="COM16"    IsCheckable="True" />
+            <MenuItem Header="COM17"    IsCheckable="True" />
+            <MenuItem Header="COM18"    IsCheckable="True" />
+            <MenuItem Header="COM19"    IsCheckable="True" />
+            <MenuItem Header="COM20"    IsCheckable="True" />
+            <MenuItem Header="COM21"    IsCheckable="True" />
+            <MenuItem Header="COM22"    IsCheckable="True" />
+            <MenuItem Header="COM23"    IsCheckable="True" />
+            <MenuItem Header="COM24"    IsCheckable="True" />
+            <MenuItem Header="COM25"    IsCheckable="True" />
+            <MenuItem Header="COM26"    IsCheckable="True" />
+            <MenuItem Header="COM27"    IsCheckable="True" />
+            <MenuItem Header="COM28"    IsCheckable="True" />
+            <MenuItem Header="COM29"    IsCheckable="True" />
+            <MenuItem Header="COM30"    IsCheckable="True" />
+
+
+        </ContextMenu>
+        <!--<ContextMenu x:Key="mBoudrate" >
+            <MenuItem Header="110"    IsCheckable="True" />
+            <MenuItem Header="300"    IsCheckable="True"/>
+            <MenuItem Header="600"    IsCheckable="True"/>
+            <MenuItem Header="1200"   IsCheckable="True"/>
+            <MenuItem Header="2400"   IsCheckable="True"/>
+            <MenuItem Header="4800"   IsCheckable="True"/>
+            <MenuItem Header="9600"   IsCheckable="True"/>
+            <MenuItem Header="14400"  IsCheckable="True"/>
+            <MenuItem Header="19200"  IsCheckable="True"/>
+            <MenuItem Header="38400"  IsCheckable="True"/>
+            <MenuItem Header="56400"  IsCheckable="True"/>
+            <MenuItem Header="57600"  IsCheckable="True"/>
+            <MenuItem Header="115200" IsCheckable="True"/>
+            <MenuItem Header="128000" IsCheckable="True"/>
+            <MenuItem Header="256000" IsCheckable="True"/>
+        </ContextMenu>-->
+
         <ContextMenu x:Key="mDataBit" >
             <MenuItem Header="5"      IsCheckable="True" />
             <MenuItem Header="6"      IsCheckable="True"/>
@@ -364,11 +416,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
             <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}"  MouseLeftButtonDown="Box_Click_Port"    />
-                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}"  MouseLeftButtonDown="Box_Click_Boudrate"/>
-                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}"  MouseLeftButtonDown="Box_Click_DataBit"  />
-                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}"  MouseLeftButtonDown="Box_Click_Parity" />
-                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}"  MouseLeftButtonDown="Box_Click_StopBit" />
+                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=PortName}"   MouseLeftButtonDown="Box_Click_Port"    />
+                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=BaudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
+                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=DataBits}"   MouseLeftButtonDown="Box_Click_DataBit"  />
+                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=ParityBits}" MouseLeftButtonDown="Box_Click_Parity" />
+                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=StopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
                 <StackPanel/>
             </DockPanel>
         </Grid>
@@ -383,11 +435,6 @@
     </Grid>
 </Window>
 
-<!--DataContext="{Binding MyPort, FallbackValue=PortName}"  
-    DataContext="{Binding MyPort, FallbackValue=BaudRate}"  
-    DataContext="{Binding MyPort, FallbackValue=DataBits}"  
-    DataContext="{Binding MyPort, FallbackValue=ParityBits}"
-    DataContext="{Binding MyPort, FallbackValue=StopBits}"-->
 
 <!--Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }"
 Left="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }"-->

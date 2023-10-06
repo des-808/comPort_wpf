@@ -223,6 +223,7 @@ namespace comPort_wpf
             if (MyPort.IsOpen) { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler; }
             ComPortInit();
             ToolBarComInit();
+            string x;
             try
             {
                 MyPort.Open();
@@ -234,12 +235,14 @@ namespace comPort_wpf
             catch (UnauthorizedAccessException) { i = 1; /*MessageBox.Show(comInitStruct.pName+" уже используется");*/ }
             catch (FileNotFoundException) { i = 2;/* MessageBox.Show(comInitStruct.pName + " Не существует");*/ }
             catch (System.IO.IOException){ i = 3; /*MessageBox.Show($"Превышен таймаут подключения к: {MyPort.PortName}");*/ }
+            catch (System.ArgumentOutOfRangeException e) { i = 4; MessageBox.Show(e.ToString());  }
             finally
             {
                 if (i > 0) { _port = false; ToolBarComDeInit(); }
                 if (i == 1) { toolbar_sostoyanie.Text = ComInitStruct.pName + " уже используется"; }
                 else if (i == 2) { toolbar_sostoyanie.Text = ComInitStruct.pName + " Не существует"; }
                 else if (i == 3) { toolbar_sostoyanie.Text = ComInitStruct.pName + " Превышен таймаут подключения"; }
+                else if (i == 4) { toolbar_sostoyanie.Text = ComInitStruct.pName + " Указана несовместимая скорость Бод"; }
             }
             return _port;
         }
@@ -321,6 +324,7 @@ namespace comPort_wpf
             mPort.PlacementTarget = sender as System.Windows.Controls.Button;
             mPort.FontSize = 10;
             mPort.Name = "ComPortSearch";
+            //mPort.ItemsSource.GetEnumerator().MoveNext();
             mPort.Items.Clear();
             mPort.ItemsSource = ports;
             mPort.IsOpen = true;
@@ -390,7 +394,7 @@ namespace comPort_wpf
         void Signals_Visible()
         {
             if (settings.Panel_Signals) { gridSignals.Height = 25; gridSignals.Visibility = Visibility.Visible; checkSignals.IsChecked = settings.Panel_Signals; }
-            else { gridSignals.Height = 0; gridSignals.Visibility = Visibility.Hidden; mainWindow.Height = 445; checkSignals.IsChecked = settings.Panel_Signals; }
+            else {                        gridSignals.Height = 0;  gridSignals.Visibility = Visibility.Hidden;  checkSignals.IsChecked = settings.Panel_Signals; }
         }
         private void Button_Rx_Data(object sender, EventArgs e)
         {
@@ -479,14 +483,12 @@ namespace comPort_wpf
         private void O_Programme_Click(object sender, RoutedEventArgs e) => MessageBox.Show("   Не до реплика ComPort ToolKit");
         public int StringToParity(string str)
         {
-            //string[] arrStr = new[]{ "q"};
             int i = 0;
             if (str != null)
             {
                 for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrParitet[i], str)) { return i; };
-                    if (Equals(arrParitetEng[i], str)) { return i; };
+                    if (Equals(arrParitet[i], str) || (Equals(arrParitetEng[i], str)) ) return i;
                 }
             }
             return i = 0;
@@ -496,7 +498,7 @@ namespace comPort_wpf
             if (p <= arrParitet.Length) { return arrParitet[p]; }
             return "";
         }
-        private double StringToStop(string str)
+        private int StringToStop(string str)
         {
             int i = 0;
             double d = 1;
@@ -504,26 +506,17 @@ namespace comPort_wpf
             {
                 for (; i < arrStop.Length; i++)
                 {
-                    if (Equals(arrStop[i], str) && (Equals(arrStopEng[i], str)))
-                    {
-                        switch (i)
-                        {
-                            case 0: d = 1; break;
-                            case 1: d = 1.5; break;
-                            case 2: d = 2; break;
-                        }
-                        return d;
-                    }
+                    if (Equals(arrStop[i], str) || Equals(arrStopEng[i], str))return i+=1;
                 }
             }
-            return d;
+            return i;
         }
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
-        private string[] arrBit = new[] { "5", "6", "7", "8" };
+        //private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
         private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
-        private string[] arrStop = new[] { "1", "1.5", "2" };
-        private string[] arrStopEng = new[] { "One", "Two", "OnePointFive" };
+        private string[] arrStop = new[] { "1",  "2","1.5" };
+        private string[] arrStopEng = new[] { "One",  "Two","OnePointFive" };
 
     }
     
@@ -643,9 +636,6 @@ namespace comPort_wpf
             }
             return "";
         }
-
-
-
         //private enum Parity
         //{
         //    None = 0,
@@ -670,18 +660,14 @@ namespace comPort_wpf
         //    OnePointFive = 3,
         //}
     }
-    public class Com : ComStruct
-    {
-        public required string Name { get; set; } = "";
-        public required string BoudRate { get; set; }
-        public required string PortName { get; set; }
-        public required string Parity { get; set; }
-        public required string DBit { get; set; }
-        public required string SBit { get; set; }
-
-        //public bool isChecked { get; set; } = false;
-        public override string ToString() => $"{Name}";
-    }
+    //public class Com : ComStruct
+    //{
+    //    public required string BoudRate { get; set; }
+    //    public required string PortName { get; set; }
+    //    public required string Parity { get; set; }
+    //    public required string DBit { get; set; }
+    //    public required string SBit { get; set; }
+    //}
     public static class Zaglushka {
         public static string? portName { get;  set; }
         public static string? baudRate { get;  set; }
@@ -690,14 +676,14 @@ namespace comPort_wpf
         public static StopBits stopBits { get;  set; }
 
        
-        public static void Save()
-        {
-            AddUpdateAppSettings("Port", portName);
-            AddUpdateAppSettings("BoudRate", baudRate.ToString());
-            AddUpdateAppSettings("Parity", parityBits.ToString());
-            AddUpdateAppSettings("Data", dataBits.ToString());
-            AddUpdateAppSettings("Stop", stopBits.ToString());
-        }
+        //public static void Save()
+        //{
+        //    AddUpdateAppSettings("Port", portName);
+        //    AddUpdateAppSettings("BoudRate", baudRate.ToString());
+        //    AddUpdateAppSettings("Parity", parityBits.ToString());
+        //    AddUpdateAppSettings("Data", dataBits.ToString());
+        //    AddUpdateAppSettings("Stop", stopBits.ToString());
+        //}
 
         public static void AddUpdateAppSettings(string key, string value)
         {
