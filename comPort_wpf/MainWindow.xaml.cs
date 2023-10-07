@@ -20,7 +20,8 @@ namespace comPort_wpf
     delegate void dMessge();
     public partial class MainWindow : Window
     {
-        //public delegate void Mydelegate();
+       
+        public delegate void Mydelegate();
         private static Settings1 settings = new();
         private string[] ports = new[] { "" };
         public static ComStruct comInitStruct = new();
@@ -30,7 +31,7 @@ namespace comPort_wpf
         public Terminal term = new Terminal() { HEX = "", ASCII = "" };
         public StringToHex stringToHex = new StringToHex();
         bool btnStop = false;
-        bool btnVisibleClock = true;
+        //bool btnVisibleClock = true;
 
         // public ComSearch_ comsearch = new ();
         //string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
@@ -40,7 +41,9 @@ namespace comPort_wpf
         ////public static readonly DependencyProperty ComProperty;
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
-        public ObservableCollection<ComSearch_> listViewCom { get; set; }
+        //public ObservableCollection<ComSearch_> listViewCom { get; set; }
+        public ObservableCollection<DBit> dBits { get; set; }
+            Binding binding;
         public static ComStruct ComInitStruct { get => comInitStruct; set => comInitStruct = value; }
 
         public double GetWidthMainWindow() => mainWindow.Width;
@@ -61,6 +64,7 @@ namespace comPort_wpf
             terminalRx = new ObservableCollection<Terminal>(); TerminalRXList.ItemsSource = terminalRx;
             this.DataContext = MyPort;
             btnStop = (bool)btnStop_rx.IsChecked;
+            
            // comInitStruct.print_AppSettings();
             //Xbox.Text = Convert.ToString(X) ;
             //Ybox.Text = Convert.ToString(Y);
@@ -168,39 +172,33 @@ namespace comPort_wpf
             box3.IsEnabled = true;
             box4.IsEnabled = true;
             box5.IsEnabled = true;
-            box1.Text = "порт: " + MyPort.PortName ;//  "COM7";
-            box2.Text = "скор.: " + MyPort.BaudRate.ToString();//  115200;
-            box3.Text = "бит: " + MyPort.DataBits .ToString();//  8;
-            box4.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
-            box5.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
-
-            //box1.Text = "порт: " + ComInitStruct.pName;//  "COM7";
-            //box2.Text = "скор.: " + ComInitStruct.baudRat.ToString();//  115200;
-            //box3.Text = "бит: " + ComInitStruct.dBit.ToString();//  8;
-            //box4.Text = "паритет: " + ComInitStruct.parity.ToString();// Parity.None ;//Parity.None
-            //box5.Text = "стоп бит: " + ComInitStruct.sBit.ToString();//  StopBits.One;
+            //box1.Text = "порт: " + MyPort.PortName ;//  "COM7";
+            //box2.Text = "скор.: " + MyPort.BaudRate.ToString();//  115200;
+            //box3.Text = "бит: " + MyPort.DataBits .ToString();//  8;
+            //box4.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
+            //box5.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
         }
         private void ToolBarComDeInit()
         {
-            box1.Text = "порт:---";
-            box2.Text = "скор.:---";
-            box3.Text = "бит:---";
-            box4.Text = "паритет:---";
-            box5.Text = "стоп бит:---";
-            box1.IsEnabled = false;
-            box2.IsEnabled = false;
-            box3.IsEnabled = false;
-            box4.IsEnabled = false;
-            box5.IsEnabled = false;
+            //box1.Text = "порт:---";
+            //box2.Text = "скор.:---";
+            //box3.Text = "бит:---";
+            //box4.Text = "паритет:---";
+            //box5.Text = "стоп бит:---";
+            //box1.IsEnabled = false;
+            //box2.IsEnabled = false;
+            //box3.IsEnabled = false;
+            //box4.IsEnabled = false;
+            //box5.IsEnabled = false;
         }
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
-            MyPort.Close();
             ComStruct.AddUpdateAppSettings("Port",MyPort.PortName);
             ComStruct.AddUpdateAppSettings("BoudRate",MyPort.BaudRate.ToString());
             ComStruct.AddUpdateAppSettings("Parity", MyPort.Parity.ToString());
             ComStruct.AddUpdateAppSettings("Data", MyPort.DataBits.ToString());
             ComStruct.AddUpdateAppSettings("Stop", MyPort.StopBits.ToString());
+            MyPort.Close();
             this.Close(); // закрытие окна
         }
         private void Clear_rx(object sender, RoutedEventArgs e) { term.SetCountRx(0); terminalRx.Clear(); }
@@ -340,9 +338,16 @@ namespace comPort_wpf
         }
         private void Box_Click_DataBit(object sender, MouseButtonEventArgs e)
         {
-            ContextMenu? mData = this.FindResource("mDataBit") as ContextMenu;
-            mData.PlacementTarget = sender as Button;
+            //ContextMenu? mData = this.FindResource("mDataBit") as ContextMenu;
+            //mData.PlacementTarget = sender as Button;
+            ContextMenu? mData = new ContextMenu();
+            foreach(var d in arrBit) { mData.Items.Add(d); }
+            mData.PlacementTarget = sender as System.Windows.Controls.Button;
             mData.IsOpen = true;
+        }
+        private void Click_ContextMenu_DataBit()
+        {
+
         }
         private void Box_Click_Parity(object sender, MouseButtonEventArgs e)
         {
@@ -512,12 +517,12 @@ namespace comPort_wpf
             return i;
         }
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
-        //private string[] arrBit = new[] { "5", "6", "7", "8" };
+        private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
         private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
         private string[] arrStop = new[] { "1",  "2","1.5" };
         private string[] arrStopEng = new[] { "One",  "Two","OnePointFive" };
-
+        private Delegate enter;
     }
     
     public class StringToHex
@@ -548,6 +553,10 @@ namespace comPort_wpf
         public string CountsRx() { countRx++; return countRx.ToString(); }
         public string CountsTx() { countTx++; return countTx.ToString(); }
         public string Tim() { return DateTime.Now.ToString("HH:mm:ss:fff"); }
+    }
+    public class DBit
+    {
+        public static string Value { get; set; }
     }
     static class Data
     {
@@ -662,11 +671,11 @@ namespace comPort_wpf
     }
     //public class Com : ComStruct
     //{
-    //    public required string BoudRate { get; set; }
     //    public required string PortName { get; set; }
-    //    public required string Parity { get; set; }
-    //    public required string DBit { get; set; }
-    //    public required string SBit { get; set; }
+    //    public required int BoudRate { get; set; }
+    //    public required int Parity { get; set; }
+    //    public required int DBit { get; set; }
+    //    public required double SBit { get; set; }
     //}
     public static class Zaglushka {
         public static string? portName { get;  set; }

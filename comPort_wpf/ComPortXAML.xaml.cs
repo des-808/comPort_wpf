@@ -13,7 +13,6 @@ namespace comPort_wpf
         
     public partial class ComPortXAML : Window
     {
-        
         dMessge messsage;
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
@@ -26,9 +25,9 @@ namespace comPort_wpf
         // Объявляем событие Sobitie на основе делегата
         //public event Mydelegate Sobitie;
         private Settings1 settings = new Settings1();
+        private ListBox listBoxCom = new ListBox();
         public ComPortXAML()
         {
-
             InitializeComponent();
             settingsLoadTopLeft();
             //CanvasVisiblity.Visibility = (settings.ComSearchWindow)? Visibility.Hidden:Visibility.Visible;
@@ -36,12 +35,13 @@ namespace comPort_wpf
             ports = SerialPort.GetPortNames();
             listViewCom = new ObservableCollection<ComSearch_>(); ListViewCom_.ItemsSource = listViewCom;
 
+            
             foreach (string b in ports) { PortBox.Items.Add(b); }
             foreach (string b in arrBoudRate) { BoudBox.Items.Add(b); }
             foreach (string b in arrBit) { DataBox.Items.Add(b); }
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
-
+            
             PortBox.Text = ComStruct.ReadSetting("Port");
             BoudBox.Text = ComStruct.ReadSetting("BoudRate");
             DataBox.Text = ComStruct.ReadSetting("Data");
@@ -73,11 +73,11 @@ namespace comPort_wpf
             //if (Sobitie !=null)
             //Sobitie();
         }
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            settings.Save();
-            base.OnClosing(e);
-        }
+        //protected override void OnClosing(CancelEventArgs e)
+        //{
+        //    settings.Save();
+        //    base.OnClosing(e);
+        //}
 
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
@@ -121,6 +121,7 @@ namespace comPort_wpf
         }
         private void BtnCancel(object sender, RoutedEventArgs e)
         {
+            settingsSaveTopLeft();
             Close();
         }
         private void settingsSaveTopLeft()
@@ -167,9 +168,7 @@ namespace comPort_wpf
             }
             //writeThread.Join();
         }
-
         private static void SearchPorts(out string[] ports) { ports = SerialPort.GetPortNames(); }
-
         public static void Read()
         {
             while (_continue)
@@ -224,10 +223,13 @@ namespace comPort_wpf
         {
             StopBox.Text = Convert.ToString(StopBox.SelectedItem);
             StopBox.TabIndex = StopBox.SelectedIndex;
+ 
         }
         private void Click_selectPortNameBtn(object sender, RoutedEventArgs e)
         {
-            PortBox.TabIndex = ListViewCom_.SelectedIndex;   
+            PortBox.TabIndex = ListViewCom_.SelectedIndex; 
+            listBoxCom.Items.Add(ListViewCom_.SelectedIndex);
+            foreach (object o in listBoxCom.Items)MessageBox.Show(o.ToString());
         }
 
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };

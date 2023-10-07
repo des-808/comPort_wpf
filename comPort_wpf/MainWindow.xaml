@@ -416,11 +416,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
             <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=PortName}"   MouseLeftButtonDown="Box_Click_Port"    />
-                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=BaudRate}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
-                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=DataBits}"   MouseLeftButtonDown="Box_Click_DataBit"  />
-                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=ParityBits}" MouseLeftButtonDown="Box_Click_Parity" />
-                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding MyPort, FallbackValue=StopBits}"   MouseLeftButtonDown="Box_Click_StopBit" />
+                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Port, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_Port"    />
+                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=BoudRate, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
+                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Data, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_DataBit"  />
+                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Parity, Mode=TwoWay}" MouseLeftButtonDown="Box_Click_Parity" />
+                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Stop, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_StopBit" />
                 <StackPanel/>
             </DockPanel>
         </Grid>

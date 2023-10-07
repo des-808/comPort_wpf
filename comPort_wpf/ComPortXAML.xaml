@@ -21,7 +21,7 @@
 
         <Canvas Width="200" Grid.Column="0">
             <Border BorderBrush="Black" BorderThickness="1,1,1,1" Height="189" Width="160" Canvas.Left="10" Canvas.Top="10"   HorizontalAlignment="Left" VerticalAlignment="Center" CornerRadius="2,2,2,2" />
-            <ComboBox x:Name="PortBox"     Width="79" Height="20" Canvas.Left="86" Canvas.Top="20"  HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="selectorPortBox"/>
+            <ComboBox x:Name="PortBox"     Width="79" Height="20" Canvas.Left="86" Canvas.Top="20"  HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="selectorPortBox" DataContext="{Binding Properties, XPath=Port, Mode=TwoWay}" />
             <ComboBox x:Name="BoudBox"     Width="79" Height="20" Canvas.Left="86" Canvas.Top="45" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="selectorBoudBox"/>
             <ComboBox x:Name="DataBox"     Width="79" Height="20" Canvas.Left="86" Canvas.Top="70" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="selectorDataBox"/>
             <ComboBox x:Name="ParityBox"   Width="79" Height="20" Canvas.Left="86" Canvas.Top="98"  HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="selectorParityBox"/>
