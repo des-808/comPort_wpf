@@ -194,14 +194,7 @@
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
 
-        <!--<ContextMenu x:Key="cmButton" >
-            <MenuItem Header="Menu item 1" IsCheckable="True" Checked="menu1" />
-            <MenuItem Header="Menu item 2" IsCheckable="True" Checked="menu2"/>
-            <Separator />
-            <MenuItem Header="Menu item 3" IsCheckable="True" Checked="menu3"/>
-        </ContextMenu>-->
-
-        <ContextMenu x:Key="mComPort"  >
+        <!--<ContextMenu x:Key="mComPort"  >
             <MenuItem Header="COM1"     IsCheckable="True" />
             <MenuItem Header="COM2"     IsCheckable="True" />
             <MenuItem Header="COM3"     IsCheckable="True" />
@@ -232,10 +225,8 @@
             <MenuItem Header="COM28"    IsCheckable="True" />
             <MenuItem Header="COM29"    IsCheckable="True" />
             <MenuItem Header="COM30"    IsCheckable="True" />
-
-
         </ContextMenu>
-        <!--<ContextMenu x:Key="mBoudrate" >
+        <ContextMenu x:Key="mBoudrate" >
             <MenuItem Header="110"    IsCheckable="True" />
             <MenuItem Header="300"    IsCheckable="True"/>
             <MenuItem Header="600"    IsCheckable="True"/>
@@ -252,8 +243,7 @@
             <MenuItem Header="128000" IsCheckable="True"/>
             <MenuItem Header="256000" IsCheckable="True"/>
         </ContextMenu>-->
-
-        <ContextMenu x:Key="mDataBit" >
+        <!--<ContextMenu x:Key="mDataBit" >
             <MenuItem Header="5"      IsCheckable="True" />
             <MenuItem Header="6"      IsCheckable="True"/>
             <MenuItem Header="7"      IsCheckable="True"/>
@@ -270,12 +260,12 @@
             <MenuItem Header="1"      IsCheckable="True" />
             <MenuItem Header="1.5"    IsCheckable="True"/>
             <MenuItem Header="2"      IsCheckable="True"/>
-        </ContextMenu>
+        </ContextMenu>-->
 
     </Window.Resources>
-    <av:Window.DataContext>
+    <Window.DataContext>
             <p:Settings1/>
-    </av:Window.DataContext>
+    </Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -311,7 +301,7 @@
                     <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_ToolBar"       x:Name="checkToolBar"  IsChecked="True"/>
                     <Separator/>
                     <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"  Click="Button_Tx_Data"              x:Name="Tx_Data"       IsChecked="True"/>
-					<MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"              x:Name="Rx_Data"       IsChecked="True"/>
+                    <MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"              x:Name="Rx_Data"       IsChecked="True"/>
                     <Separator/>
                     <MenuItem Header="Журнал"/>
                 </MenuItem>
@@ -349,7 +339,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}" av:ItemsSource="{av:SampleData ItemCount=5}">
+            <ListView x:Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
@@ -373,7 +363,7 @@
                 </ListView.ContextMenu>
             </ListView>
             <GridSplitter                   Grid.Column="1" Grid.RowSpan="3" Background="#FF8E90A4" ShowsPreview="True" Width="4" HorizontalAlignment="Stretch"  />
-            <ListView x:Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}" av:ItemsSource="{av:SampleData ItemCount=5}">
+            <ListView x:Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
@@ -415,27 +405,29 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
-            <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True" >
-                <TextBlock x:Name="box1" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Port, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_Port"    />
-                <TextBlock x:Name="box2" Width="90"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=BoudRate, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_Boudrate"/>
-                <TextBlock x:Name="box3" Width="80"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Data, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_DataBit"  />
-                <TextBlock x:Name="box4" Width="100" Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Parity, Mode=TwoWay}" MouseLeftButtonDown="Box_Click_Parity" />
-                <TextBlock x:Name="box5" Width="95"  Style="{DynamicResource MyTextBlokStyle}" DataContext="{Binding Properties, XPath=Stop, Mode=TwoWay}"   MouseLeftButtonDown="Box_Click_StopBit" />
-                <StackPanel/>
+            <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True">
+                <ComboBox x:Name="cBoxPortName" Width="80"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Path=Properties}" Text="{Binding portName}"/>
+                <ComboBox x:Name="cBoxBoudRate" Width="90"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=BoudRate, Mode=TwoWay}"/>
+                <ComboBox x:Name="cBoxData"     Width="80"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=Data, Mode=TwoWay}"    />
+                <ComboBox x:Name="cBoxParity"   Width="100" Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=Parity, Mode=TwoWay}"  />
+                <ComboBox x:Name="cBoxStop"     Width="95"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=Stop, Mode=TwoWay}"    />
+                <StackPanel/>   
+                
             </DockPanel>
         </Grid>
-		<Grid  Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridSignals" Grid.Height="25">
+        <Grid  Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" UseLayoutRounding="False"  Background="#FF847E7F" x:Name="gridSignals" Grid.Height="25">
             <StackPanel Orientation="Horizontal">
                 <TextBox Width="40" x:Name="Xbox"/>
                 <TextBox Width="40" x:Name="Ybox"/>
             </StackPanel>
-            
+
         </Grid>
 
     </Grid>
 </Window>
 
-
+<!--<ComboBox x:Name="cBoxPortName" Width="80"  Style="{DynamicResource MyComboBoxStyle}" Text="{Binding portName}"/>
+<ComboBox x:Name="cBoxBoudRAte" Width="90"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=BoudRate, Mode=TwoWay}"/>-->
 <!--Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }"
 Left="{Binding ElementName=mainWindow, Mode=TwoWay, Path=Y,UpdateSourceTrigger=PropertyChanged }"-->
 <!--MouseLeftButtonDown="Box_Click_Port"    
