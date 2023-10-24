@@ -395,18 +395,40 @@ namespace comPort_wpf
         {
             var x = GetWidthMainWindow();
             double widthStorona = 0;
-            if ((double)x > 304) widthStorona = (double)x / 2;
+            //GridSplitter.
+            //if ((double)x > 304) 
+                widthStorona = (double)x / 2;
 
-            if (Rx_Data.IsChecked == true) { TerminalRXList.Visibility = Visibility.Visible; TerminalRXList.Width = widthStorona; }
-            else { TerminalRXList.Visibility = Visibility.Hidden; TerminalRXList.Width = 0; TerminalTXList.Width += widthStorona; }
+            if (Rx_Data.IsChecked == true) { 
+                TerminalRXList.Visibility = Visibility.Visible;
+                TerminalRXList.Width = x;
+                ColumnDefinitionTX.MinWidth = 300;
+                GridSplitter.Visibility = Visibility.Visible; 
+            }
+            else { TerminalRXList.Visibility = Visibility.Hidden;
+                /*TerminalRXList.Width = 0;*/ 
+                TerminalTXList.Width = x;     
+                ColumnDefinitionRX.MinWidth = 0;     
+                GridSplitter.Visibility = Visibility.Hidden;
+            }
         }
         private void Button_Tx_Data(object sender, EventArgs e)
         {
             var x = GetWidthMainWindow();
-            double widtthStorona = 0;
-            widtthStorona = (double)(x) / 2;
-            if (Tx_Data.IsChecked == true) { TerminalTXList.Visibility = Visibility.Visible; TerminalTXList.Width = widtthStorona; }
-            else { TerminalTXList.Visibility = Visibility.Hidden; TerminalTXList.Width = 0; TerminalRXList.Width += widtthStorona; }
+            double widthStorona = 0;
+            widthStorona = (double)(x) / 2;
+            
+            if (Tx_Data.IsChecked == true) {
+                TerminalTXList.Visibility = Visibility.Visible;
+                TerminalTXList.Width = x;
+                ColumnDefinitionTX.MinWidth = 300;
+                GridSplitter.Visibility = Visibility.Visible; }
+            else { 
+                TerminalTXList.Visibility = Visibility.Hidden;
+                /*TerminalTXList.Width = 0;*/ 
+                TerminalRXList.Width = x;     
+                ColumnDefinitionTX.MinWidth = 0;    
+                GridSplitter.Visibility = Visibility.Hidden; }
         }
         //private void menu1(object sender, RoutedEventArgs e)
         //{
