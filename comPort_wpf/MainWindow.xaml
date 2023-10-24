@@ -11,7 +11,7 @@
        <!-- Height = "{Binding XPath=Settings1  , Path=HeightMainWindow, Mode=TwoWay}" 
         Width =  "{Binding Source=(x:Static p:Setings1), Path=WidthMainWindow, Mode=TwoWay}"
         Top =    "{Binding Source=(x:Static p:Setings1), Path=TopMainWindow, Mode=TwoWay}" 
-        Left=    "{Binding Source=(x:Static p:Setings1), Path=LeftMainWindow, Mode=TwoWay}" 
+        Left=    "{Binding Source=(x:Static p:Setings1), Path=LeftMainWindow, Mode=TwoWay}"  
     
     Title="ComPort tool" Height="420" Width="1200" MinHeight="300" MinWidth="620" x:Name="mainWindow" Closing="MainWindow_Closing"
     Top ="{Binding ElementName=mainWindow, Mode=TwoWay, Path=X,UpdateSourceTrigger=PropertyChanged }" 
