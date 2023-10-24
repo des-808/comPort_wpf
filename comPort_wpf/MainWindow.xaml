@@ -298,7 +298,7 @@
                 <MenuItem Header="  Вид   "                                 Style="{DynamicResource MenuItem_Up_toolBar}"  InputGestureText="true" >
                     <MenuItem Header="Сигналы"                              IsCheckable="True"  Click="Button_Click_Signals"        x:Name="checkSignals"  IsChecked="True"/>
                     <MenuItem Header="Контроль времени"                     IsCheckable="True"  Click="Button_Click_Clock_Visible"  x:Name="checkClock"    IsChecked="True" />
-                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_ToolBar"       x:Name="checkToolBar"  IsChecked="True"/>
+                    <MenuItem Header="Панель инструментов"                  IsCheckable="True"  Click="Button_Click_ToolBar"        x:Name="checkToolBar"  IsChecked="True"/>
                     <Separator/>
                     <MenuItem Header="Панель отправляемых сообщений"        IsCheckable="True"  Click="Button_Tx_Data"              x:Name="Tx_Data"       IsChecked="True"/>
                     <MenuItem Header="Панель принимаемых сообщений"         IsCheckable="True"  Click="Button_Rx_Data"              x:Name="Rx_Data"       IsChecked="True"/>
@@ -339,13 +339,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}">
+            <ListView x:Name="TerminalTXList" Grid.Column="0" Grid.Row="0" SelectionChanged="TerminalTXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalTx}" FontSize="{Binding FontSize}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"  />
-                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Отправленно"   />
-                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#"           Width="{Binding widthCountTX,Mode=TwoWay}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"       Width="{Binding widthTimeTX,Mode=TwoWay}"  />
+                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Отправленно" Width="{Binding widthASCIITX,Mode=TwoWay}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII"       Width="{Binding widthHexTX,Mode=TwoWay}"   />
                     </GridView>
                 </ListView.View>
 
@@ -363,13 +363,13 @@
                 </ListView.ContextMenu>
             </ListView>
             <GridSplitter                   Grid.Column="1" Grid.RowSpan="3" Background="#FF8E90A4" ShowsPreview="True" Width="4" HorizontalAlignment="Stretch"  />
-            <ListView x:Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}">
+            <ListView x:Name="TerminalRXList" Grid.Column="2" Grid.Row="0" SelectionChanged="TerminalRXList_SelectionChanged" Style="{DynamicResource myListVievStyle}"  ItemsSource="{DynamicResource ResourceKey=terminalRx}" FontSize="{Binding FontSize}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"  />
-                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Принято"   />
-                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Count}" Header="#"       Width="{Binding widthCountRX,Mode=TwoWay}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}"  Header="Время"   Width="{Binding widthTimeRX,Mode=TwoWay}"  />
+                        <GridViewColumn DisplayMemberBinding="{Binding HEX}"   Header="Принято" Width="{Binding widthASCIIRX,Mode=TwoWay}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding ASCII}" Header="ASCII"   Width="{Binding widthHexRX,Mode=TwoWay}"   />
                     </GridView>
                 </ListView.View>
 
@@ -406,7 +406,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="toolbar_sostoyanie" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" Padding="1,0,0,0" Background="#FF707070"  Foreground="Black" Grid.Column="0" Grid.ColumnSpan="2" />
             <DockPanel   Grid.Column="2" Grid.Row="0" Height="25"  VerticalAlignment="Top"  Width="Auto" LastChildFill="False" Margin="0,0,4,0" Grid.IsSharedSizeScope="True">
-                <ComboBox x:Name="cBoxPortName" Width="80"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Path=Properties}" Text="{Binding portName}"/>
+                <ComboBox x:Name="cBoxPortName" Width="80"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Path=Properties}" Text="{Binding portName, Mode=TwoWay}"/>
                 <ComboBox x:Name="cBoxBoudRate" Width="90"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=BoudRate, Mode=TwoWay}"/>
                 <ComboBox x:Name="cBoxData"     Width="80"  Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=Data, Mode=TwoWay}"    />
                 <ComboBox x:Name="cBoxParity"   Width="100" Style="{DynamicResource MyComboBoxStyle}" DataContext="{Binding Properties, XPath=Parity, Mode=TwoWay}"  />

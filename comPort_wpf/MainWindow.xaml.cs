@@ -76,6 +76,8 @@ namespace comPort_wpf
             //this.DataContext = MyPort;
             btnStop = (bool)btnStop_rx.IsChecked;
 
+            //TerminalRXList.
+
             // comInitStruct.print_AppSettings();
             //Xbox.Text = Convert.ToString(X) ;
             //Ybox.Text = Convert.ToString(Y);
@@ -578,6 +580,18 @@ namespace comPort_wpf
     //{
     //    public static string Value { get; set; }
     //}
+
+    public class ListWidth
+    {
+        private static double count;
+        private static double time;
+        private static double ascii;
+        private static double hex;
+        public double Count { get { return count; } set { count = value; } }
+        public double Time { get { return time; } set { time = value; } }
+        public double ASCII { get { return ascii; } set { ascii = value; } }
+        public double HEX { get { return hex; } set { hex = value; } }
+    } 
     public class ComSearch_
     {
         public required Image Img { get; set; }
