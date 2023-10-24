@@ -45,3 +45,6 @@
 /comPort_wpf/bin/Debug/net7.0-windows/comPort_wpf.dll
 /.vs/comPort_wpf/DesignTimeBuild/.dtbcache.v2
 /.vs/comPort_wpf/FileContentIndex/38c0a210-99cc-4e8d-a8d4-d91961d901e4.vsidx
+/.vs/comPort_wpf/FileContentIndex
+/comPort_wpf/obj/Debug/net7.0-windows/comPort_wpf_MarkupCompile.i.cache
+/comPort_wpf/obj/Debug/net7.0-windows/comPort_wpf_MarkupCompile.i.lref
