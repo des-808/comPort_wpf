@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
-
+ 
 namespace comPort_wpf
 {
     delegate void dMessge();
