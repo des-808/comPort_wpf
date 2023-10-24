@@ -222,7 +222,7 @@ namespace comPort_wpf {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/comPort_wpf;component/comportxaml.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/comPort_wpf;V1.0.0.0;component/comportxaml.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\ComPortXAML.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
