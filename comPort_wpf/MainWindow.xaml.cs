@@ -22,7 +22,7 @@ namespace comPort_wpf
     public partial class MainWindow : Window
     {
        
-        public delegate void Mydelegate();
+        public delegate void Mydelegate(); 
         private static Settings1 settings = new();
         private string[] ports = new[] { "" };
         public static ComStruct comInitStruct = new();
