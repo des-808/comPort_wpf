@@ -109,11 +109,11 @@ namespace comPort_wpf
             //MessageBox.Show($"Port: { ConfigurationManager.AppSettings["Port"]} ,Boudrate: {ConfigurationManager.AppSettings["BoudRate"]}");
 
             SearchPorts(out ports);
-            arrPortNameObserv = new(ports);        cBoxPortName.ItemsSource = arrPortNameObserv; cBoxPortName.SelectedIndex = 0;  cBoxPortName.IsEnabled = false; 
-            arrBoudRateObserv = new(arrBoudRate);  cBoxBoudRate.ItemsSource = arrBoudRateObserv; cBoxBoudRate.SelectedIndex = 12; cBoxBoudRate.IsEnabled = false;
-            arrDataObserv     = new(arrBit);       cBoxData.ItemsSource     = arrDataObserv;     cBoxData.SelectedIndex = 3;      cBoxData.IsEnabled = false;
-            arrParityObserv   = new(arrParitet);   cBoxParity.ItemsSource   = arrParityObserv;   cBoxParity.SelectedIndex = 0;    cBoxParity.IsEnabled = false;
-            arrStopObserv     = new(arrStop);      cBoxStop.ItemsSource     = arrStopObserv;     cBoxStop.SelectedIndex = 0;      cBoxStop.IsEnabled = false;
+            arrPortNameObserv = new(ports);        cBoxPortName.ItemsSource = arrPortNameObserv;// cBoxPortName.SelectedIndex = 0;  cBoxPortName.IsEnabled = false; 
+            arrBoudRateObserv = new(arrBoudRate);  cBoxBoudRate.ItemsSource = arrBoudRateObserv;// cBoxBoudRate.SelectedIndex = 12; cBoxBoudRate.IsEnabled = false;
+            arrDataObserv     = new(arrBit);       cBoxData.ItemsSource     = arrDataObserv;    // cBoxData.SelectedIndex = 3;      cBoxData.IsEnabled = false;
+            arrParityObserv   = new(arrParitet);   cBoxParity.ItemsSource   = arrParityObserv;  // cBoxParity.SelectedIndex = 0;    cBoxParity.IsEnabled = false;
+            arrStopObserv     = new(arrStop);      cBoxStop.ItemsSource     = arrStopObserv;    // cBoxStop.SelectedIndex = 0;      cBoxStop.IsEnabled = false;
         }
 
 
@@ -178,27 +178,38 @@ namespace comPort_wpf
         private static void SearchPorts(out string[] ports) => ports = SerialPort.GetPortNames();
         public void ComPortInit()
         {
-            MyPort.PortName = ComStruct.ReadSetting("Port");//  "COM7";
-            MyPort.BaudRate = Convert.ToInt32(ComStruct.ReadSetting("BoudRate"));//  115200;
-            MyPort.Parity =   (Parity)Convert.ToInt32(StringToParity(ComStruct.ReadSetting("Parity")));// Parity.None ;//Parity.None
-            MyPort.DataBits = Convert.ToInt32(ComStruct.ReadSetting("Data"));//  8;
-            MyPort.StopBits = (StopBits)StringToStop(ComStruct.ReadSetting("Stop"));//  StopBits.One;
+            //MyPort.PortName = ComStruct.ReadSetting("Port");//  "COM7";
+            //MyPort.BaudRate = Convert.ToInt32(ComStruct.ReadSetting("BoudRate"));//  115200;
+            //MyPort.Parity =   (Parity)Convert.ToInt32(StringToParity(ComStruct.ReadSetting("Parity")));// Parity.None ;//Parity.None
+            //MyPort.DataBits = Convert.ToInt32(ComStruct.ReadSetting("Data"));//  8;
+            //MyPort.StopBits = (StopBits)StringToStop(ComStruct.ReadSetting("Stop"));//  StopBits.One;
+
+            MyPort.PortName = settings.portName;//  "COM7";
+            MyPort.BaudRate = settings.BoudRate;//  115200;
+            MyPort.Parity =   (Parity)Convert.ToInt32(StringToParity(settings.Parity));// Parity.None ;//Parity.None
+            MyPort.DataBits = Convert.ToInt32(settings.Data);//  8;
+            MyPort.StopBits = (StopBits)StringToStop(settings.Stop);//  StopBits.One;
         }
         private void ToolBarComInit()
         {
-            cBoxPortName.IsEnabled = true; cBoxPortName.Text = "порт: " + MyPort.PortName;//  "COM7";
-            cBoxBoudRate.IsEnabled = true; cBoxBoudRate.Text = "скор.: " + MyPort.BaudRate.ToString();//  115200;
-            cBoxData.IsEnabled =     true; cBoxData.Text = "бит: " + MyPort.DataBits.ToString();//  8;
-            cBoxParity.IsEnabled =   true; cBoxParity.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
-            cBoxStop.IsEnabled =     true; cBoxStop.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
+            //cBoxPortName.IsEnabled = true; cBoxPortName.Text = "порт: " + MyPort.PortName;//  "COM7";
+            //cBoxBoudRate.IsEnabled = true; cBoxBoudRate.Text = "скор.: " + MyPort.BaudRate.ToString();//  115200;
+            //cBoxData.IsEnabled =     true; cBoxData.Text = "бит: " + MyPort.DataBits.ToString();//  8;
+            //cBoxParity.IsEnabled =   true; cBoxParity.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
+            //cBoxStop.IsEnabled =     true; cBoxStop.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
+            cBoxPortName.IsEnabled = true;  cBoxPortName.Text = "порт: " + settings.portName   ;//  "COM7";
+            cBoxBoudRate.IsEnabled = true;  cBoxBoudRate.Text = "скор.: " + settings.BoudRate ;//  115200;
+            cBoxData.IsEnabled = true;      cBoxData.Text = "бит: " + settings.Data ;//  8;
+            cBoxParity.IsEnabled = true;    cBoxParity.Text = "паритет: " + settings.Parity ;// Parity.None ;//Parity.None
+            cBoxStop.IsEnabled = true;      cBoxStop.Text = "стоп бит: " + settings.Stop ;//  StopBits.One;
         }
         private void ToolBarComDeInit()
         {
-            cBoxPortName.Text = "порт:---";     cBoxPortName.IsEnabled = false;
-            cBoxBoudRate.Text = "скор.:---";    cBoxBoudRate.IsEnabled = false;
-            cBoxData.Text     = "бит:---";      cBoxData.IsEnabled = false;
-            cBoxParity.Text   = "паритет:---";  cBoxParity.IsEnabled = false;
-            cBoxStop.Text     = "стоп бит:---"; cBoxStop.IsEnabled = false;
+            //cBoxPortName.Text = "порт:---";     cBoxPortName.IsEnabled = false;
+            //cBoxBoudRate.Text = "скор.:---";    cBoxBoudRate.IsEnabled = false;
+            //cBoxData.Text     = "бит:---";      cBoxData.IsEnabled = false;
+            //cBoxParity.Text   = "паритет:---";  cBoxParity.IsEnabled = false;
+            //cBoxStop.Text     = "стоп бит:---"; cBoxStop.IsEnabled = false;
         }
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
@@ -614,11 +625,11 @@ namespace comPort_wpf
             //parityBits = Convert.ToInt32(ReadSetting("Parity"));
             //stopBits = (StopBits)Convert.ToDouble(ReadSetting("Stop"));
 
-            portName = Zaglushka.ReadSetting("Port");
-            baudRate = Convert.ToInt32(Zaglushka.baudRate);
-            parityBits = Convert.ToInt32(Zaglushka.parityBits);
-            dataBits = Convert.ToInt32(Zaglushka.dataBits);
-            stopBits = (StopBits)Convert.ToDouble(Zaglushka.stopBits);
+            //portName = Zaglushka.ReadSetting("Port");
+            //baudRate = Convert.ToInt32(Zaglushka.baudRate);
+            //parityBits = Convert.ToInt32(Zaglushka.parityBits);
+            //dataBits = Convert.ToInt32(Zaglushka.dataBits);
+            //stopBits = (StopBits)Convert.ToDouble(Zaglushka.stopBits);
 
         }
         public string pName { get { return portName; } set { portName = value; } }

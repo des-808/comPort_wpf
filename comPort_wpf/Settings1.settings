@@ -68,17 +68,17 @@
     <Setting Name="portName" Type="System.String" Scope="User">
       <Value Profile="(Default)">COM7</Value>
     </Setting>
-    <Setting Name="BoudRate" Type="System.String" Scope="User">
+    <Setting Name="BoudRate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">115201</Value>
     </Setting>
-    <Setting Name="Data" Type="System.String" Scope="User">
+    <Setting Name="Data" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="Parity" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">none</Value>
     </Setting>
     <Setting Name="Stop" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1.5</Value>
+      <Value Profile="(Default)">one</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -290,9 +290,9 @@ namespace comPort_wpf {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("115201")]
-        public string BoudRate {
+        public int BoudRate {
             get {
-                return ((string)(this["BoudRate"]));
+                return ((int)(this["BoudRate"]));
             }
             set {
                 this["BoudRate"] = value;
@@ -302,9 +302,9 @@ namespace comPort_wpf {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public string Data {
+        public int Data {
             get {
-                return ((string)(this["Data"]));
+                return ((int)(this["Data"]));
             }
             set {
                 this["Data"] = value;
@@ -313,7 +313,7 @@ namespace comPort_wpf {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("none")]
         public string Parity {
             get {
                 return ((string)(this["Parity"]));
@@ -325,7 +325,7 @@ namespace comPort_wpf {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("one")]
         public string Stop {
             get {
                 return ((string)(this["Stop"]));
