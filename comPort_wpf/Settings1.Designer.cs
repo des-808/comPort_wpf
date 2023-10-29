@@ -170,12 +170,12 @@ namespace comPort_wpf {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int FontSize {
+        public int fontSize {
             get {
-                return ((int)(this["FontSize"]));
+                return ((int)(this["fontSize"]));
             }
             set {
-                this["FontSize"] = value;
+                this["fontSize"] = value;
             }
         }
         

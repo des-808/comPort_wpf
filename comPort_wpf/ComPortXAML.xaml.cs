@@ -13,7 +13,7 @@ namespace comPort_wpf
         
     public partial class ComPortXAML : Window
     {
-        dMessge messsage;
+        
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
@@ -29,6 +29,7 @@ namespace comPort_wpf
         public ComPortXAML()
         {
             InitializeComponent();
+            
             settingsLoadTopLeft();
             //CanvasVisiblity.Visibility = (settings.ComSearchWindow)? Visibility.Hidden:Visibility.Visible;
             ports_window_open_cloce_func();
@@ -42,11 +43,17 @@ namespace comPort_wpf
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
             
-            PortBox.Text = ComStruct.ReadSetting("Port");
-            BoudBox.Text = ComStruct.ReadSetting("BoudRate");
-            DataBox.Text = ComStruct.ReadSetting("Data");
-            ParityBox.Text = perevodchikParitet (ComStruct.ReadSetting("Parity"));
-            StopBox.Text = perevodchikStop(ComStruct.ReadSetting("Stop"));
+            //PortBox.Text = ComStruct.ReadSetting("Port");
+            //BoudBox.Text = ComStruct.ReadSetting("BoudRate");
+            //DataBox.Text = ComStruct.ReadSetting("Data");
+            //ParityBox.Text = perevodchikParitet (ComStruct.ReadSetting("Parity"));
+            //StopBox.Text = perevodchikStop(ComStruct.ReadSetting("Stop"));
+
+            PortBox.Text = settings.portName;
+            BoudBox.Text = settings.BoudRate.ToString();
+            DataBox.Text = settings.Data.ToString();
+            ParityBox.Text = settings.Parity;
+            StopBox.Text = settings.Stop;
             //MyPort = new(ComInitStruct.pName, ComInitStruct.baudRat, (Parity)ComInitStruct.parity, ComInitStruct.dBit, (StopBits)ComInitStruct.sBit);
         }
         public string perevodchikParitet(string str)
@@ -67,12 +74,12 @@ namespace comPort_wpf
         }
 
         //Cоздаем метод для события, который просто будет обращаться к событию
-        public void MetoddlyaSobitiya()
-        {
-            //Можно вставить проверку наличия события
-            //if (Sobitie !=null)
-            //Sobitie();
-        }
+        //public void MetoddlyaSobitiya()
+        //{
+        //    //Можно вставить проверку наличия события
+        //    //if (Sobitie !=null)
+        //    //Sobitie();
+        //}
         //protected override void OnClosing(CancelEventArgs e)
         //{
         //    settings.Save();
@@ -82,11 +89,18 @@ namespace comPort_wpf
         private void BtnEnter(object sender, RoutedEventArgs e)
         {
             settingsSaveTopLeft();
-            ComStruct.AddUpdateAppSettings("Port", PortBox.Text);
-            ComStruct.AddUpdateAppSettings("BoudRate", BoudBox.Text.ToString());
-            ComStruct.AddUpdateAppSettings("Parity", ParityBox.Text.ToString());
-            ComStruct.AddUpdateAppSettings("Data", DataBox.Text.ToString());
-            ComStruct.AddUpdateAppSettings("Stop", StopBox.Text.ToString());
+            //ComStruct.AddUpdateAppSettings("Port", PortBox.Text);
+            //ComStruct.AddUpdateAppSettings("BoudRate", BoudBox.Text.ToString());
+            //ComStruct.AddUpdateAppSettings("Parity", ParityBox.Text.ToString());
+            //ComStruct.AddUpdateAppSettings("Data", DataBox.Text.ToString());
+            //ComStruct.AddUpdateAppSettings("Stop", StopBox.Text.ToString());
+            settings.portName   = PortBox.Text;
+            settings.BoudRate   = Convert.ToInt32( BoudBox.Text);
+            settings.Data       = Convert.ToInt32(DataBox.Text);
+            settings.Parity     = ParityBox.Text;
+            settings.Stop       = StopBox.Text;
+            settings.Save();
+            settings.Reload();
             Close();
         }
         public int StringToParity(string str)

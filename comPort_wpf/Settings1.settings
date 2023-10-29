@@ -38,7 +38,7 @@
     <Setting Name="Received_Messages_Panel" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="FontSize" Type="System.Int32" Scope="User">
+    <Setting Name="fontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="widthCountTX" Type="System.Double" Scope="User">

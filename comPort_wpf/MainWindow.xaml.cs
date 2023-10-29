@@ -18,11 +18,8 @@ using MessageBox = System.Windows.MessageBox;
  
 namespace comPort_wpf
 {
-    delegate void dMessge();
     public partial class MainWindow : Window
     {
-       
-        public delegate void Mydelegate(); 
         private static Settings1 settings = new();
         private string[] ports = new[] { "" };
         public static ComStruct comInitStruct = new();
@@ -39,26 +36,16 @@ namespace comPort_wpf
         ObservableCollection<string> arrDataObserv;
         ObservableCollection<string> arrStopObserv;
         ObservableCollection<string> arrPortNameObserv;
-        //bool btnVisibleClock = true;
 
-        // public ComSearch_ comsearch = new ();
-        //string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
-        //string[] arrBit =      new[] { "5","6","7","8" };
-        //string[] arrParitet =  new[] { "нет.","нечёт.","чёт.","марк.","пробел" };
-        //string[] arrStop =     new[] { "1","1.5","2" };
-        ////public static readonly DependencyProperty ComProperty;
+        
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
-        //public ObservableCollection<ComSearch_> listViewCom { get; set; }
-        //public ObservableCollection<DBit> dBits { get; set; }
-           // Binding binding;
+        
         public static ComStruct ComInitStruct { get => comInitStruct; set => comInitStruct = value; }
         
-        //List<Terminal> p=new List<Terminal>();
-        ObservableCollection<Terminal> collection = new ObservableCollection<Terminal>();
         public double GetWidthMainWindow() => mainWindow.Width;
         public void SetWidthMainWindow(object value) => mainWindow.Width = (double)value;
-
+         
         public MainWindow()
         {
             InitializeComponent();
@@ -75,8 +62,6 @@ namespace comPort_wpf
             terminalRx = new ObservableCollection<Terminal>(); TerminalRXList.ItemsSource = terminalRx;
             //this.DataContext = MyPort;
             btnStop = (bool)btnStop_rx.IsChecked;
-
-            //TerminalRXList.
 
             // comInitStruct.print_AppSettings();
             //Xbox.Text = Convert.ToString(X) ;
@@ -116,7 +101,7 @@ namespace comPort_wpf
             arrStopObserv     = new(arrStop);      cBoxStop.ItemsSource     = arrStopObserv;    // cBoxStop.SelectedIndex = 0;      cBoxStop.IsEnabled = false;
         }
 
-
+        void refresh() { }
         //public class SizeWindow
         //{
         //    int x;
@@ -197,11 +182,11 @@ namespace comPort_wpf
             //cBoxData.IsEnabled =     true; cBoxData.Text = "бит: " + MyPort.DataBits.ToString();//  8;
             //cBoxParity.IsEnabled =   true; cBoxParity.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
             //cBoxStop.IsEnabled =     true; cBoxStop.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
-            cBoxPortName.IsEnabled = true;  cBoxPortName.Text = "порт: " + settings.portName   ;//  "COM7";
-            cBoxBoudRate.IsEnabled = true;  cBoxBoudRate.Text = "скор.: " + settings.BoudRate ;//  115200;
-            cBoxData.IsEnabled = true;      cBoxData.Text = "бит: " + settings.Data ;//  8;
-            cBoxParity.IsEnabled = true;    cBoxParity.Text = "паритет: " + settings.Parity ;// Parity.None ;//Parity.None
-            cBoxStop.IsEnabled = true;      cBoxStop.Text = "стоп бит: " + settings.Stop ;//  StopBits.One;
+            cBoxPortName.IsEnabled = true;  cBoxPortName.Text = "порт: " +  settings.portName   ;//  "COM7";
+            cBoxBoudRate.IsEnabled = true;  cBoxBoudRate.Text = "скор.: " + settings.BoudRate   ;//  115200;
+            cBoxData.IsEnabled = true;      cBoxData.Text = "бит: " +       settings.Data       ;//  8;
+            cBoxParity.IsEnabled = true;    cBoxParity.Text = "паритет: " + settings.Parity     ;// Parity.None ;//Parity.None
+            cBoxStop.IsEnabled = true;      cBoxStop.Text = "стоп бит: " +  settings.Stop       ;//  StopBits.One;
         }
         private void ToolBarComDeInit()
         {
@@ -218,6 +203,8 @@ namespace comPort_wpf
             ComStruct.AddUpdateAppSettings("Parity", MyPort.Parity.ToString());
             ComStruct.AddUpdateAppSettings("Data", MyPort.DataBits.ToString());
             ComStruct.AddUpdateAppSettings("Stop", MyPort.StopBits.ToString());
+            settings.Save();
+            settings.Reload();
             MyPort.Close();
             this.Close(); // закрытие окна
         }
@@ -331,6 +318,9 @@ namespace comPort_wpf
         {
             ComPortXAML comXAML = new();
             comXAML.ShowDialog();
+            //ToolBarComInit();
+
+
         }
         private void Box_Click_Port(object sender, MouseButtonEventArgs e)
         {
@@ -558,51 +548,36 @@ namespace comPort_wpf
             return hexString;
         }
     }
-    public class Terminal
-    {
-        private static int countRx = 0;
-        private static int countTx = 0;
-       public Terminal() { }
-        //Terminal(string? count, string? time, string hEX, string aSCII)
-        //{
-        //    Count = count;
-        //    Time = time;
-        //    HEX = hEX;
-        //    ASCII = aSCII;
-        //}
-
-        public string? Count { get; set; }
-        public string? Time { get; set; }
-
-        public required string HEX { get; set; }
-        public required string ASCII { get; set; }
-        public void SetCountRx(int c) { countRx = c; }
-        public void SetCountTx(int c) { countTx = c; }
-        //public int GetCount() { return count; }
-        public string CountsRx() { countRx++; return countRx.ToString(); }
-        public string CountsTx() { countTx++; return countTx.ToString(); }
-        public string Tim() { return DateTime.Now.ToString("HH:mm:ss:fff"); }
-    }
-    //public class DBit
+    //public class Terminal
     //{
-    //    public static string Value { get; set; }
-    //}
-    //static class Data
-    //{
-    //    public static string Value { get; set; }
-    //}
+    //    private static int countRx = 0;
+    //    private static int countTx = 0;
+    //   public Terminal() { }
 
-    public class ListWidth
-    {
-        private static double count;
-        private static double time;
-        private static double ascii;
-        private static double hex;
-        public double Count { get { return count; } set { count = value; } }
-        public double Time { get { return time; } set { time = value; } }
-        public double ASCII { get { return ascii; } set { ascii = value; } }
-        public double HEX { get { return hex; } set { hex = value; } }
-    } 
+    //    public string? Count { get; set; }
+    //    public string? Time { get; set; }
+
+    //    public required string HEX { get; set; }
+    //    public required string ASCII { get; set; }
+    //    public void SetCountRx(int c) { countRx = c; }
+    //    public void SetCountTx(int c) { countTx = c; }
+    //    public string CountsRx() { countRx++; return countRx.ToString(); }
+    //    public string CountsTx() { countTx++; return countTx.ToString(); }
+    //    public string Tim() { return DateTime.Now.ToString("HH:mm:ss:fff"); }
+    //}
+ 
+
+    //public class ListWidth
+    //{
+    //    private static double count;
+    //    private static double time;
+    //    private static double ascii;
+    //    private static double hex;
+    //    public double Count { get { return count; } set { count = value; } }
+    //    public double Time { get { return time; } set { time = value; } }
+    //    public double ASCII { get { return ascii; } set { ascii = value; } }
+    //    public double HEX { get { return hex; } set { hex = value; } }
+    //} 
     public class ComSearch_
     {
         public required Image Img { get; set; }
