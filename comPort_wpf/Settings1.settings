@@ -39,7 +39,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="fontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">12</Value>
     </Setting>
     <Setting Name="widthCountTX" Type="System.Double" Scope="User">
       <Value Profile="(Default)">30</Value>

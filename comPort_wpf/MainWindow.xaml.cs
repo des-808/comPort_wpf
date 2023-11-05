@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Data;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
-using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
- 
+
 namespace comPort_wpf
 {
     public partial class MainWindow : Window
@@ -28,29 +24,28 @@ namespace comPort_wpf
         private delegate void UpTDelegate(string text);
         public Terminal term = new Terminal() { HEX = "", ASCII = "" };
         public StringToHex stringToHex = new StringToHex();
-        bool btnStop = false;
+        private bool btnStop = false;
+        private ObservableCollection<string> arrBoudRateObserv;
+        private ObservableCollection<string> arrParityObserv;
+        private ObservableCollection<string> arrDataObserv;
+        private ObservableCollection<string> arrStopObserv;
+        private ObservableCollection<string> arrPortNameObserv;
 
 
-        ObservableCollection<string> arrBoudRateObserv;
-        ObservableCollection<string> arrParityObserv;
-        ObservableCollection<string> arrDataObserv;
-        ObservableCollection<string> arrStopObserv;
-        ObservableCollection<string> arrPortNameObserv;
-
-        
         public ObservableCollection<Terminal> terminalTx { get; set; }
         public ObservableCollection<Terminal> terminalRx { get; set; }
-        
+
         public static ComStruct ComInitStruct { get => comInitStruct; set => comInitStruct = value; }
-        
+
         public double GetWidthMainWindow() => mainWindow.Width;
         public void SetWidthMainWindow(object value) => mainWindow.Width = (double)value;
-         
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ApplicationViewModel(new DefaulDialogService(), new JsonFileService());
             //DataContext = new ApplicationViewModel(new DefaulDialogService(), new JsonFileService());
-            settingsLoadTopLeftHeightWidth();
+            SettingsLoadTopLeftHeightWidth();
             //Settings1 settings = new Settings1();
             Signals_Visible();
             Clock_Visible();
@@ -62,6 +57,9 @@ namespace comPort_wpf
             terminalRx = new ObservableCollection<Terminal>(); TerminalRXList.ItemsSource = terminalRx;
             //this.DataContext = MyPort;
             btnStop = (bool)btnStop_rx.IsChecked;
+            TerminalRXList.DataContext = terminalRx;
+            TerminalTXList.DataContext = terminalTx;
+
 
             // comInitStruct.print_AppSettings();
             //Xbox.Text = Convert.ToString(X) ;
@@ -94,14 +92,14 @@ namespace comPort_wpf
             //MessageBox.Show($"Port: { ConfigurationManager.AppSettings["Port"]} ,Boudrate: {ConfigurationManager.AppSettings["BoudRate"]}");
 
             SearchPorts(out ports);
-            arrPortNameObserv = new(ports);        cBoxPortName.ItemsSource = arrPortNameObserv;// cBoxPortName.SelectedIndex = 0;  cBoxPortName.IsEnabled = false; 
-            arrBoudRateObserv = new(arrBoudRate);  cBoxBoudRate.ItemsSource = arrBoudRateObserv;// cBoxBoudRate.SelectedIndex = 12; cBoxBoudRate.IsEnabled = false;
-            arrDataObserv     = new(arrBit);       cBoxData.ItemsSource     = arrDataObserv;    // cBoxData.SelectedIndex = 3;      cBoxData.IsEnabled = false;
-            arrParityObserv   = new(arrParitet);   cBoxParity.ItemsSource   = arrParityObserv;  // cBoxParity.SelectedIndex = 0;    cBoxParity.IsEnabled = false;
-            arrStopObserv     = new(arrStop);      cBoxStop.ItemsSource     = arrStopObserv;    // cBoxStop.SelectedIndex = 0;      cBoxStop.IsEnabled = false;
+            arrPortNameObserv = new(ports);       cBoxPortName.ItemsSource = arrPortNameObserv; // cBoxPortName.SelectedIndex = 0;  cBoxPortName.IsEnabled = false; 
+            arrBoudRateObserv = new(arrBoudRate); cBoxBoudRate.ItemsSource = arrBoudRateObserv; // cBoxBoudRate.SelectedIndex = 12; cBoxBoudRate.IsEnabled = false;
+            arrDataObserv =     new(arrBit);      cBoxData.ItemsSource = arrDataObserv;         // cBoxData.SelectedIndex = 3;      cBoxData.IsEnabled = false;
+            arrParityObserv =   new(arrParitet);  cBoxParity.ItemsSource = arrParityObserv;     // cBoxParity.SelectedIndex = 0;    cBoxParity.IsEnabled = false;
+            arrStopObserv =     new(arrStop);     cBoxStop.ItemsSource = arrStopObserv;         // cBoxStop.SelectedIndex = 0;      cBoxStop.IsEnabled = false;
         }
 
-        void refresh() { }
+        private void refresh() { }
         //public class SizeWindow
         //{
         //    int x;
@@ -130,7 +128,7 @@ namespace comPort_wpf
         //    }
         //}
 
-        private void settingsSaveTopLeftHeightWidth()
+        private void SettingsSaveTopLeftHeightWidth()
         {
             settings.HeightMainWindow = mainWindow.Height;
             settings.WidthMainWindow = mainWindow.Width;
@@ -143,7 +141,7 @@ namespace comPort_wpf
             //Y = Convert.ToInt32(appSettingsGet("Y"));
             //MessageBox.Show(X + "  " + Y);
         }
-        private void settingsLoadTopLeftHeightWidth()
+        private void SettingsLoadTopLeftHeightWidth()
         {
             mainWindow.Height = settings.HeightMainWindow;
             mainWindow.Width = settings.WidthMainWindow;
@@ -171,7 +169,7 @@ namespace comPort_wpf
 
             MyPort.PortName = settings.portName;//  "COM7";
             MyPort.BaudRate = settings.BoudRate;//  115200;
-            MyPort.Parity =   (Parity)Convert.ToInt32(StringToParity(settings.Parity));// Parity.None ;//Parity.None
+            MyPort.Parity = (Parity)Convert.ToInt32(StringToParity(settings.Parity));// Parity.None ;//Parity.None
             MyPort.DataBits = Convert.ToInt32(settings.Data);//  8;
             MyPort.StopBits = (StopBits)StringToStop(settings.Stop);//  StopBits.One;
         }
@@ -182,11 +180,11 @@ namespace comPort_wpf
             //cBoxData.IsEnabled =     true; cBoxData.Text = "бит: " + MyPort.DataBits.ToString();//  8;
             //cBoxParity.IsEnabled =   true; cBoxParity.Text = "паритет: " + MyPort.Parity.ToString();// Parity.None ;//Parity.None
             //cBoxStop.IsEnabled =     true; cBoxStop.Text = "стоп бит: " + MyPort.StopBits.ToString();//  StopBits.One;
-            cBoxPortName.IsEnabled = true;  cBoxPortName.Text = "порт: " +  settings.portName   ;//  "COM7";
-            cBoxBoudRate.IsEnabled = true;  cBoxBoudRate.Text = "скор.: " + settings.BoudRate   ;//  115200;
-            cBoxData.IsEnabled = true;      cBoxData.Text = "бит: " +       settings.Data       ;//  8;
-            cBoxParity.IsEnabled = true;    cBoxParity.Text = "паритет: " + settings.Parity     ;// Parity.None ;//Parity.None
-            cBoxStop.IsEnabled = true;      cBoxStop.Text = "стоп бит: " +  settings.Stop       ;//  StopBits.One;
+            cBoxPortName.IsEnabled = true; cBoxPortName.Text = "порт: " + settings.portName;//  "COM7";
+            cBoxBoudRate.IsEnabled = true; cBoxBoudRate.Text = "скор.: " + settings.BoudRate;//  115200;
+            cBoxData.IsEnabled = true; cBoxData.Text = "бит: " + settings.Data;//  8;
+            cBoxParity.IsEnabled = true; cBoxParity.Text = "паритет: " + settings.Parity;// Parity.None ;//Parity.None
+            cBoxStop.IsEnabled = true; cBoxStop.Text = "стоп бит: " + settings.Stop;//  StopBits.One;
         }
         private void ToolBarComDeInit()
         {
@@ -198,8 +196,8 @@ namespace comPort_wpf
         }
         private void Exit_programm(object sender, RoutedEventArgs e)
         {
-            ComStruct.AddUpdateAppSettings("Port",MyPort.PortName);
-            ComStruct.AddUpdateAppSettings("BoudRate",MyPort.BaudRate.ToString());
+            ComStruct.AddUpdateAppSettings("Port", MyPort.PortName);
+            ComStruct.AddUpdateAppSettings("BoudRate", MyPort.BaudRate.ToString());
             ComStruct.AddUpdateAppSettings("Parity", MyPort.Parity.ToString());
             ComStruct.AddUpdateAppSettings("Data", MyPort.DataBits.ToString());
             ComStruct.AddUpdateAppSettings("Stop", MyPort.StopBits.ToString());
@@ -222,7 +220,7 @@ namespace comPort_wpf
         }
         private bool Open_port()
         {
-           // ComPortInit();
+            // ComPortInit();
             int i = 0;
             bool _port = true;
             if (MyPort.IsOpen) { MyPort.Close(); MyPort.DataReceived -= DataReceivedHandler; }
@@ -239,8 +237,8 @@ namespace comPort_wpf
             }
             catch (UnauthorizedAccessException) { i = 1; /*MessageBox.Show(comInitStruct.pName+" уже используется");*/ }
             catch (FileNotFoundException) { i = 2;/* MessageBox.Show(comInitStruct.pName + " Не существует");*/ }
-            catch (System.IO.IOException){ i = 3; /*MessageBox.Show($"Превышен таймаут подключения к: {MyPort.PortName}");*/ }
-            catch (System.ArgumentOutOfRangeException e) { i = 4; MessageBox.Show(e.ToString());  }
+            catch (System.IO.IOException) { i = 3; /*MessageBox.Show($"Превышен таймаут подключения к: {MyPort.PortName}");*/ }
+            catch (System.ArgumentOutOfRangeException e) { i = 4; MessageBox.Show(e.ToString()); }
             finally
             {
                 if (i > 0) { _port = false; ToolBarComDeInit(); }
@@ -255,7 +253,10 @@ namespace comPort_wpf
         {
             Thread.Sleep(25);
             SerialPort sp = (SerialPort)sender;
-            string indata = sp.ReadExisting();
+            string indata = "";
+            try { indata = sp.ReadExisting();}
+            catch(InvalidOperationException ev) { /*MessageBox.Show(ev.ToString());*/return; }
+            
             char[] delimiterCharss = { '\r', '\n' };
             string[] podstroki = indata.Split(delimiterCharss, StringSplitOptions.RemoveEmptyEntries);
             if (btnStop) { return; }
@@ -267,7 +268,9 @@ namespace comPort_wpf
         private void ReadData(string data)
         {
             string dataHex = stringToHex.ToHex(data);
+            //TerminalRXList.DataContext = terminalRx;
             terminalRx.Add(new Terminal { Count = term.CountsRx(), Time = term.Tim(), HEX = dataHex, ASCII = data });
+            
             //terminalRx.SelectedIndex = terminalRx.Items.Count - 1;
             //terminalRx.ScrollIntoView(terminalRx.SelectedItem);
         }
@@ -281,6 +284,7 @@ namespace comPort_wpf
             try
             {
                 MyPort.Write(ba, 0, ba.Length);
+                //TerminalTXList.DataContext = terminalTx;
                 terminalTx.Add(new Terminal { Count = term.CountsTx(), Time = term.Tim(), HEX = dataHex, ASCII = data });
             }
             catch (Exception) { string port = MyPort.PortName; MessageBox.Show("Шо то не так с " + port); }
@@ -299,7 +303,7 @@ namespace comPort_wpf
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            settingsSaveTopLeftHeightWidth();
+            SettingsSaveTopLeftHeightWidth();
             try { Close_port(); }
             catch { System.Windows.MessageBox.Show("error close port"); }
             // this.Close(); // закрытие окна
@@ -319,8 +323,6 @@ namespace comPort_wpf
             ComPortXAML comXAML = new();
             comXAML.ShowDialog();
             //ToolBarComInit();
-
-
         }
         private void Box_Click_Port(object sender, MouseButtonEventArgs e)
         {
@@ -338,19 +340,19 @@ namespace comPort_wpf
         }
         private void Box_Click_Boudrate(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
         private void Box_Click_DataBit(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
         private void Box_Click_Parity(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
         private void Box_Click_StopBit(object sender, MouseButtonEventArgs e)
         {
-           
+
         }
         //private void menuItem1_Click(object sender, System.EventArgs e)
         //{
@@ -361,36 +363,39 @@ namespace comPort_wpf
         //}
         private void Button_Click_Clock_Visible(object sender, RoutedEventArgs e)
         {
-            if (settings.Panel_Clock){ settings.Panel_Clock = false;settings.Save();}
-            else{settings.Panel_Clock = true;settings.Save();}
+            if (settings.Panel_Clock) { settings.Panel_Clock = false; settings.Save(); }
+            else { settings.Panel_Clock = true; settings.Save(); }
             Clock_Visible();
         }
-        void Clock_Visible()
+
+        public void Clock_Visible()
         {
             this.SatusBarClock.Visibility = settings.Panel_Clock ? Visibility.Collapsed : Visibility.Visible;
             checkClock.IsChecked = !settings.Panel_Clock;
         }
         private void Button_Click_ToolBar(object sender, EventArgs e)
         {
-            if (settings.Panel_ToolBar) { settings.Panel_ToolBar = false;settings.Save();}
-            else { settings.Panel_ToolBar = true;settings.Save();}
+            if (settings.Panel_ToolBar) { settings.Panel_ToolBar = false; settings.Save(); }
+            else { settings.Panel_ToolBar = true; settings.Save(); }
             ToolBar_Visible();
         }
-        void ToolBar_Visible()
+
+        private void ToolBar_Visible()
         {
-            if (!settings.Panel_ToolBar) { StecPanel_ToolBar.Visibility = Visibility.Hidden; mainWindow.Background = StecPanel_ToolBar.Background;checkToolBar.IsChecked = settings.Panel_ToolBar; }
+            if (!settings.Panel_ToolBar) { StecPanel_ToolBar.Visibility = Visibility.Hidden; mainWindow.Background = StecPanel_ToolBar.Background; checkToolBar.IsChecked = settings.Panel_ToolBar; }
             else StecPanel_ToolBar.Visibility = Visibility.Visible; checkToolBar.IsChecked = settings.Panel_ToolBar;
         }
         private void Button_Click_Signals(object sender, EventArgs e)
         {
-            if(settings.Panel_Signals){settings.Panel_Signals = false;settings.Save();}
-            else { settings.Panel_Signals = true;settings.Save(); }
+            if (settings.Panel_Signals) { settings.Panel_Signals = false; settings.Save(); }
+            else { settings.Panel_Signals = true; settings.Save(); }
             Signals_Visible();
         }
-        void Signals_Visible()
+
+        private void Signals_Visible()
         {
             if (settings.Panel_Signals) { gridSignals.Height = 25; gridSignals.Visibility = Visibility.Visible; checkSignals.IsChecked = settings.Panel_Signals; }
-            else {                        gridSignals.Height = 0;  gridSignals.Visibility = Visibility.Hidden;  checkSignals.IsChecked = settings.Panel_Signals; }
+            else { gridSignals.Height = 0; gridSignals.Visibility = Visibility.Hidden; checkSignals.IsChecked = settings.Panel_Signals; }
         }
         private void Button_Rx_Data(object sender, EventArgs e)
         {
@@ -438,7 +443,7 @@ namespace comPort_wpf
             Terminal[] items = new Terminal[TerminalTXList.SelectedItems.Count];
             TerminalTXList.SelectedItems.CopyTo(items, 0);
             List<Terminal> tb3 = new List<Terminal>(items);
-            
+
             //collection = (ObservableCollection<Terminal>)TerminalTXList.SelectedItems;
             //    if (collection != null)
             //    {
@@ -504,7 +509,7 @@ namespace comPort_wpf
             {
                 for (; i < arrParitet.Length; i++)
                 {
-                    if (Equals(arrParitet[i], str) || (Equals(arrParitetEng[i], str)) ) return i;
+                    if (Equals(arrParitet[i], str) || (Equals(arrParitetEng[i], str))) return i;
                 }
             }
             return i = 0;
@@ -517,12 +522,11 @@ namespace comPort_wpf
         private int StringToStop(string str)
         {
             int i = 0;
-            double d = 1;
             if (str != null)
             {
                 for (; i < arrStop.Length; i++)
                 {
-                    if (Equals(arrStop[i], str) || Equals(arrStopEng[i], str))return i+=1;
+                    if (Equals(arrStop[i], str) || Equals(arrStopEng[i], str)) return i += 1;
                 }
             }
             return i;
@@ -531,11 +535,11 @@ namespace comPort_wpf
         private string[] arrBit = new[] { "5", "6", "7", "8" };
         private string[] arrParitet = new[] { "нет.", "нечёт.", "чёт.", "марк.", "пробел" };
         private string[] arrParitetEng = new[] { "None", "Odd", "Even", "Mark", "Space" };
-        private string[] arrStop = new[] { "1",  "2","1.5" };
-        private string[] arrStopEng = new[] { "One",  "Two","OnePointFive" };
+        private string[] arrStop = new[] { "1", "2", "1.5" };
+        private string[] arrStopEng = new[] { "One", "Two", "OnePointFive" };
         private Delegate enter;
     }
-    
+
     public class StringToHex
     {
         private string hexString = "";
@@ -565,7 +569,7 @@ namespace comPort_wpf
     //    public string CountsTx() { countTx++; return countTx.ToString(); }
     //    public string Tim() { return DateTime.Now.ToString("HH:mm:ss:fff"); }
     //}
- 
+
 
     //public class ListWidth
     //{
@@ -592,7 +596,7 @@ namespace comPort_wpf
         private static int dataBits;//    = 8;            //5,6,7,8 
         private static StopBits stopBits;//   = StopBits.One; //One
 
-         static ComStruct()
+        static ComStruct()
         {
             //portName = ComStruct.ReadSetting("Port");
             //baudRate = Convert.ToInt32(ReadSetting("BoudRate"));
@@ -693,14 +697,15 @@ namespace comPort_wpf
     //    public required int DBit { get; set; }
     //    public required double SBit { get; set; }
     //}
-    public static class Zaglushka {
-        public static string? portName { get;  set; }
-        public static string? baudRate { get;  set; }
-        public static string? parityBits { get;  set; }
-        public static string? dataBits { get;  set; }
-        public static StopBits stopBits { get;  set; }
+    public static class Zaglushka
+    {
+        public static string? portName { get; set; }
+        public static string? baudRate { get; set; }
+        public static string? parityBits { get; set; }
+        public static string? dataBits { get; set; }
+        public static StopBits stopBits { get; set; }
 
-       
+
         //public static void Save()
         //{
         //    AddUpdateAppSettings("Port", portName);

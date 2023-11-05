@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Configuration;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using static comPort_wpf.MainWindow;
 
 namespace comPort_wpf
 {
-        
+
     public partial class ComPortXAML : Window
     {
-        
+
         private string[] ports;
         private ObservableCollection<ComSearch_> listViewCom;
         private int comSelectedValue = -1;
-        ComSearch_ search_Com;
-        string stroka = "";
-        public static SerialPort? MyPort = new("COM0", 115200,Parity.None,8, StopBits.One);
-        Thread writeThread = new Thread(Write);
-        static bool _continue = true;
+        private ComSearch_ search_Com;
+        private string stroka = "";
+        public static SerialPort? MyPort = new("COM0", 115200, Parity.None, 8, StopBits.One);
+        private Thread writeThread = new Thread(Write);
+        private static bool _continue = true;
         // Объявляем событие Sobitie на основе делегата
         //public event Mydelegate Sobitie;
         private Settings1 settings = new Settings1();
@@ -29,20 +26,20 @@ namespace comPort_wpf
         public ComPortXAML()
         {
             InitializeComponent();
-            
+
             settingsLoadTopLeft();
             //CanvasVisiblity.Visibility = (settings.ComSearchWindow)? Visibility.Hidden:Visibility.Visible;
             ports_window_open_cloce_func();
             ports = SerialPort.GetPortNames();
             listViewCom = new ObservableCollection<ComSearch_>(); ListViewCom_.ItemsSource = listViewCom;
 
-            
+
             foreach (string b in ports) { PortBox.Items.Add(b); }
             foreach (string b in arrBoudRate) { BoudBox.Items.Add(b); }
             foreach (string b in arrBit) { DataBox.Items.Add(b); }
             foreach (string b in arrParitet) { ParityBox.Items.Add(b); }
             foreach (string b in arrStop) { StopBox.Items.Add(b); }
-            
+
             //PortBox.Text = ComStruct.ReadSetting("Port");
             //BoudBox.Text = ComStruct.ReadSetting("BoudRate");
             //DataBox.Text = ComStruct.ReadSetting("Data");
@@ -58,8 +55,9 @@ namespace comPort_wpf
         }
         public string perevodchikParitet(string str)
         {
-            for (int i = 0; i < arrParitetEng.Length; i++) {
-                if (Equals(arrParitetEng[i], str)) str = arrParitet[i]; 
+            for (int i = 0; i < arrParitetEng.Length; i++)
+            {
+                if (Equals(arrParitetEng[i], str)) str = arrParitet[i];
             }
             return str;
         }
@@ -94,11 +92,11 @@ namespace comPort_wpf
             //ComStruct.AddUpdateAppSettings("Parity", ParityBox.Text.ToString());
             //ComStruct.AddUpdateAppSettings("Data", DataBox.Text.ToString());
             //ComStruct.AddUpdateAppSettings("Stop", StopBox.Text.ToString());
-            settings.portName   = PortBox.Text;
-            settings.BoudRate   = Convert.ToInt32( BoudBox.Text);
-            settings.Data       = Convert.ToInt32(DataBox.Text);
-            settings.Parity     = ParityBox.Text;
-            settings.Stop       = StopBox.Text;
+            settings.portName = PortBox.Text;
+            settings.BoudRate = Convert.ToInt32(BoudBox.Text);
+            settings.Data = Convert.ToInt32(DataBox.Text);
+            settings.Parity = ParityBox.Text;
+            settings.Stop = StopBox.Text;
             settings.Save();
             settings.Reload();
             Close();
@@ -123,7 +121,6 @@ namespace comPort_wpf
         private int StringToStop(string str)
         {
             int i = 0;
-            double d = 1;
             if (str != null)
             {
                 for (; i < arrStop.Length; i++)
@@ -237,13 +234,13 @@ namespace comPort_wpf
         {
             StopBox.Text = Convert.ToString(StopBox.SelectedItem);
             StopBox.TabIndex = StopBox.SelectedIndex;
- 
+
         }
         private void Click_selectPortNameBtn(object sender, RoutedEventArgs e)
         {
-            PortBox.TabIndex = ListViewCom_.SelectedIndex; 
+            PortBox.TabIndex = ListViewCom_.SelectedIndex;
             listBoxCom.Items.Add(ListViewCom_.SelectedIndex);
-            foreach (object o in listBoxCom.Items)MessageBox.Show(o.ToString());
+            foreach (object o in listBoxCom.Items) MessageBox.Show(o.ToString());
         }
 
         private string[] arrBoudRate = new[] { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "256000" };
@@ -259,19 +256,21 @@ namespace comPort_wpf
         //    OnePointFive = 3,
         private void listview_item_selected(object sender, SelectionChangedEventArgs e)
         {
-            if(ListViewCom_.SelectedItem != null) { 
+            if (ListViewCom_.SelectedItem != null)
+            {
                 search_Com = (ComSearch_)ListViewCom_.SelectedItem;
-                PortBox.Text = search_Com.PorT; 
+                PortBox.Text = search_Com.PorT;
             }
             //ListViewCom_.SelectedIndex = comSelectedValue = Int32.Parse(ListViewCom_.SelectedIndex.ToString());
         }
 
         private void ports_window_open_close(object sender, RoutedEventArgs e)
         {
-           settings.ComSearchWindow = settings.ComSearchWindow ? false : true; settings.Save();
+            settings.ComSearchWindow = settings.ComSearchWindow ? false : true; settings.Save();
             ports_window_open_cloce_func();
         }
-        void ports_window_open_cloce_func()
+
+        private void ports_window_open_cloce_func()
         {
             if (settings.ComSearchWindow)
             {
@@ -281,7 +280,7 @@ namespace comPort_wpf
                 window_settings_comPort_tools.MinWidth = 380;
                 window_settings_comPort_tools.MaxWidth = 380;
                 settings.Save();
-            } 
+            }
             else
             {
                 btnPorts.Content = "Порты>>";
@@ -291,13 +290,13 @@ namespace comPort_wpf
                 window_settings_comPort_tools.MaxWidth = 195;
                 settings.Save();
             }
-            
+
         }
 
     }
 
 
-    
+
 }
 
 
