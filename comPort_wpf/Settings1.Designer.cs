@@ -169,7 +169,7 @@ namespace comPort_wpf {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
         public int fontSize {
             get {
                 return ((int)(this["fontSize"]));
@@ -182,96 +182,96 @@ namespace comPort_wpf {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public double widthCountTX {
+        public double widthCountTX1 {
             get {
-                return ((double)(this["widthCountTX"]));
+                return ((double)(this["widthCountTX1"]));
             }
             set {
-                this["widthCountTX"] = value;
+                this["widthCountTX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public double widthTimeTX {
+        public double widthTimeTX1 {
             get {
-                return ((double)(this["widthTimeTX"]));
+                return ((double)(this["widthTimeTX1"]));
             }
             set {
-                this["widthTimeTX"] = value;
+                this["widthTimeTX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public double widthASCIITX {
+        public double widthASCIITX1 {
             get {
-                return ((double)(this["widthASCIITX"]));
+                return ((double)(this["widthASCIITX1"]));
             }
             set {
-                this["widthASCIITX"] = value;
+                this["widthASCIITX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public double widthHexTX {
+        public double widthHexTX1 {
             get {
-                return ((double)(this["widthHexTX"]));
+                return ((double)(this["widthHexTX1"]));
             }
             set {
-                this["widthHexTX"] = value;
+                this["widthHexTX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public double widthCountRX {
+        public double widthCountRX1 {
             get {
-                return ((double)(this["widthCountRX"]));
+                return ((double)(this["widthCountRX1"]));
             }
             set {
-                this["widthCountRX"] = value;
+                this["widthCountRX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public double widthTimeRX {
+        public double widthTimeRX1 {
             get {
-                return ((double)(this["widthTimeRX"]));
+                return ((double)(this["widthTimeRX1"]));
             }
             set {
-                this["widthTimeRX"] = value;
+                this["widthTimeRX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public double widthASCIIRX {
+        public double widthASCIIRX1 {
             get {
-                return ((double)(this["widthASCIIRX"]));
+                return ((double)(this["widthASCIIRX1"]));
             }
             set {
-                this["widthASCIIRX"] = value;
+                this["widthASCIIRX1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public double widthHexRX {
+        public double widthHexRX1 {
             get {
-                return ((double)(this["widthHexRX"]));
+                return ((double)(this["widthHexRX1"]));
             }
             set {
-                this["widthHexRX"] = value;
+                this["widthHexRX1"] = value;
             }
         }
         
